@@ -13,9 +13,11 @@ export type IdentificationValues = {
 export function IdentificationStep({
   defaultValues,
   onSubmit,
+  loading,
 }: {
   defaultValues?: Partial<IdentificationValues>;
   onSubmit: (values: IdentificationValues) => void;
+  loading?: boolean;
 }) {
   const {
     control,
@@ -57,7 +59,15 @@ export function IdentificationStep({
       <Controller
         control={control}
         name="idNumber"
-        rules={{ required: "Enter identification number" }}
+        rules={{
+          required: "Enter identification number",
+          minLength: 11,
+          maxLength: 11,
+          pattern: {
+            value: /^[0-9]+$/,
+            message: "Enter a valid identification number (11 digits)",
+          },
+        }}
         render={({ field }) => (
           <Input
             placeholder="Identification Number"
@@ -67,8 +77,13 @@ export function IdentificationStep({
         )}
       />
 
-      <Button className="w-full" size="xl" type="submit" disabled={!isValid}>
-        Save & Continue
+      <Button
+        className="w-full"
+        size="xl"
+        type="submit"
+        disabled={!isValid || loading}
+      >
+        {loading ? "Verifying..." : "Save & Continue"}
       </Button>
     </form>
   );

@@ -42,11 +42,11 @@ export type PersonalDetailsValues = {
 export function PersonalDetailsStep({
   defaultValues,
   onSubmit,
-  onBack,
+  loading,
 }: {
   defaultValues?: Partial<PersonalDetailsValues>;
   onSubmit: (values: PersonalDetailsValues) => void;
-  onBack: () => void;
+  loading?: boolean;
 }) {
   const {
     control,
@@ -366,6 +366,7 @@ export function PersonalDetailsStep({
         <Controller
           control={control}
           name="employmentStatus"
+          rules={{ required: "Select employment status" }}
           render={({ field: { value, onChange } }) => (
             <Select
               options={EMPLOYMENT_STATUSES}
@@ -385,6 +386,7 @@ export function PersonalDetailsStep({
         <Controller
           control={control}
           name="nationality"
+          rules={{ required: "Nationality is required" }}
           render={({ field }) => <Input placeholder="Nationality" {...field} />}
         />
 
@@ -399,6 +401,7 @@ export function PersonalDetailsStep({
         <Controller
           control={control}
           name="taxStation"
+          rules={{ required: "Select tax station" }}
           render={({ field: { value, onChange } }) => (
             <Select
               options={TAX_STATIONS}
@@ -416,12 +419,13 @@ export function PersonalDetailsStep({
           "pt-5 border-t border-border"
         )}
       >
-        <Button variant="outline" size="xl" type="button" onClick={onBack}>
-          Back
-        </Button>
-
-        <Button size="xl" type="submit" disabled={!isValid}>
-          Save & Continue
+        <Button
+          className="w-full"
+          size="xl"
+          type="submit"
+          disabled={!isValid || loading}
+        >
+          {loading ? "Saving..." : "Save & Continue"}
         </Button>
       </div>
     </form>

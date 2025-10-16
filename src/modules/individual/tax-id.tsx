@@ -8,12 +8,10 @@ export type TaxIdValues = { taxId: string };
 export function TaxIdStep({
   defaultValues,
   onSubmit,
-  onBack,
   loading = false,
 }: {
   defaultValues?: Partial<TaxIdValues>;
   onSubmit: (v: TaxIdValues) => void;
-  onBack: () => void;
   loading?: boolean;
 }) {
   const {
@@ -47,22 +45,44 @@ export function TaxIdStep({
       <Controller
         control={control}
         name="taxId"
-        rules={{ required: "Enter your State IRS Taxpayer ID Number" }}
-        render={({ field }) => (
+        rules={{
+          required: "Enter your State IRS Taxpayer ID Number",
+          pattern: {
+            value: /^N-\d{8}$/,
+            message: "Enter a valid Taxpayer ID in the format N-XXXXXXXX",
+          },
+        }}
+        render={({ field: { value, onChange, ...rest } }) => (
           <Input
-            placeholder="Enter your State IRS Taxpayer ID Number"
+            placeholder="N-XXXXXXXX"
             error={errors.taxId?.message}
-            {...field}
+            value={value ?? ""}
+            maxLength={10}
+            inputMode="numeric"
+            onChange={(e) => {
+              const digits = e.target.value.replace(/[^0-9]/g, "").slice(0, 8);
+              onChange(digits ? `N-${digits}` : "N-");
+            }}
+            onFocus={() => {
+              if (!value) onChange("N-");
+            }}
+            {...rest}
           />
         )}
       />
 
-      <div className="flex items-center gap-4 justify-center">
-        <Button variant="outline" size="xl" type="button" onClick={onBack}>
-          Back
-        </Button>
-
-        <Button size="xl" type="submit" disabled={!isValid}>
+      <div
+        className={clsx(
+          "w-full flex items-center gap-4 justify-end",
+          "pt-5 border-t border-border"
+        )}
+      >
+        <Button
+          className="w-full"
+          size="xl"
+          type="submit"
+          disabled={!isValid || loading}
+        >
           {loading ? "Saving..." : "Save & Continue"}
         </Button>
       </div>

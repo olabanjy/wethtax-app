@@ -8,12 +8,10 @@ export type BusinessTaxIdValues = { stateTaxId: string; firsTaxId: string };
 export function BusinessTaxIdStep({
   defaultValues,
   onSubmit,
-  onBack,
   loading,
 }: {
   defaultValues?: Partial<BusinessTaxIdValues>;
   onSubmit: (v: BusinessTaxIdValues) => void | Promise<void>;
-  onBack: () => void;
   loading?: boolean;
 }) {
   const {
@@ -66,12 +64,13 @@ export function BusinessTaxIdStep({
       />
 
       <div className="flex items-center gap-4 justify-center">
-        <Button variant="outline" size="xl" type="button" onClick={onBack}>
-          Back
-        </Button>
-
-        <Button size="xl" type="submit" disabled={!isValid || loading}>
-          {loading ? "Submitting..." : "Save & Continue"}
+        <Button
+          className="w-full"
+          size="xl"
+          type="submit"
+          disabled={!isValid || loading}
+        >
+          {loading ? "Saving..." : "Save & Continue"}
         </Button>
       </div>
     </form>

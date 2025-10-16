@@ -53,11 +53,14 @@ const LoginForm = () => {
 
         reset();
 
-        if (data?.user?.user_type === "Individual" && !data?.user?.profile) {
+        if (
+          data?.user?.user_type === "Individual" &&
+          !data?.user?.tax_payer_id_verified
+        ) {
           navigate("/individual-profile");
         } else if (
-          data?.user?.user_type === "Business" &&
-          !data?.user?.profile
+          data?.user?.user_type === "Company" &&
+          !data?.user?.tax_payer_id_verified
         ) {
           navigate("/business-profile");
         } else {

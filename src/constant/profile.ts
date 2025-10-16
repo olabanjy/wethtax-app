@@ -1,8 +1,9 @@
 export const IDENTIFICATION_TYPES = [
-  { label: "National ID (NIN)", value: "NIN" },
-  { label: "Driver's License", value: "DRIVERS LICENSE" },
-  { label: "International Passport", value: "PASSPORT" },
-  { label: "Voter's Card", value: "VOTERS CARD" },
+  { label: "Bank Verification Number (BVN)", value: "BVN" },
+  { label: "National Identification Number (NIN)", value: "NIN" },
+  // { label: "Corporate Affairs Commission (CAC)", value: "CAC" },
+  // { label: "Tax Identification Number (TIN)", value: "TIN" },
+  // { label: "Corporate Tax Identification Number (CTIN)", value: "CTIN" },
 ];
 
 export const TITLES = [

@@ -10,9 +10,11 @@ export type BusinessIdentificationValues = {
 export function BusinessIdentificationStep({
   defaultValues,
   onSubmit,
+  loading,
 }: {
   defaultValues?: Partial<BusinessIdentificationValues>;
-  onSubmit: (values: BusinessIdentificationValues) => void;
+  onSubmit: (values: BusinessIdentificationValues) => void | Promise<void>;
+  loading?: boolean;
 }) {
   const {
     control,
@@ -26,7 +28,7 @@ export function BusinessIdentificationStep({
   return (
     <form
       className={clsx(
-        "w-full max-w-[900px] mx-auto space-y-6 bg-white rounded-[10px]",
+        "w-full max-w-[650px] mx-auto space-y-6 bg-white rounded-[10px]",
         "px-20 py-14 border border-border"
       )}
       onSubmit={handleSubmit(onSubmit)}
@@ -49,8 +51,13 @@ export function BusinessIdentificationStep({
         )}
       />
 
-      <Button className="w-full" size="xl" type="submit" disabled={!isValid}>
-        Save & Continue
+      <Button
+        className="w-full"
+        size="xl"
+        type="submit"
+        disabled={!isValid || loading}
+      >
+        {loading ? "Verifying..." : "Save & Continue"}
       </Button>
     </form>
   );

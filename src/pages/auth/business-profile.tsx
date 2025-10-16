@@ -10,14 +10,15 @@ import {
   type BusinessTaxIdValues,
 } from "@/modules/business";
 import { useSend } from "@/hooks/use-send";
+import OTP from "@/modules/otp";
+import { useStore } from "@/store";
 import clsx from "clsx";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-type AllValues =
-  & BusinessIdentificationValues
-  & CompanyDetailsValues
-  & BusinessTaxIdValues;
+type AllValues = BusinessIdentificationValues &
+  CompanyDetailsValues &
+  BusinessTaxIdValues;
 
 const steps = [
   { number: 1, label: "Identification" },
@@ -32,12 +33,57 @@ const BusinessProfile = () => {
   const [step, setStep] = useState<number>(current);
   const [values, setValues] = useState<Partial<AllValues>>({});
 
-  const { mutateAsync: updateCompany, isPending } = useSend<any, any>(
+  const [isVerify, setIsVerify] = useState(false);
+
+  const setAuth = useStore((s) => s.setAuth);
+  const authDetails = useStore((s) => s.auth.details as any);
+
+  const { mutateAsync: verifyIdentity, isPending: verifying } = useSend<
+    { id_type: "CAC"; id_number: string },
+    any
+  >("/tenant/lagos/api/v1/ums/profile/verify-identity/", {
+    method: "post",
+    successMessage: "OTP sent to your email and phone number",
+    hideToast: "success",
+    onSuccess: () => {
+      setIsVerify(true);
+      onSetParams({
+        verify: "true",
+        id_type: "CAC",
+        id_number: values.regNo as string,
+      });
+    },
+  });
+
+  const { mutateAsync: confirmOtp, isPending: confirming } = useSend<
+    { id_type: "CAC"; id_number: string; otp: string },
+    any
+  >("/tenant/lagos/api/v1/ums/profile/verify-identity/confirm-otp/", {
+    method: "post",
+    successMessage: "Identity verified",
+    onSuccess: (data) => {
+      setIsVerify(false);
+      onSetParams({ verify: "false", id_type: "", id_number: "" });
+      go(2);
+      const userData = (data as any)?.data ?? data;
+      if (userData) {
+        setAuth({ details: { ...(authDetails || {}), ...userData } });
+      }
+    },
+  });
+
+  const { mutateAsync: updateCompany, isPending: updating } = useSend<any, any>(
     "/tenant/lagos/api/v1/ums/profile/me/update-company/",
     {
       method: "patch",
       successMessage: "Company profile updated",
-      onSuccess: () => go(4),
+      onSuccess: (data) => {
+        const userData = (data as any)?.data ?? data;
+        if (userData) {
+          setAuth({ details: { ...(authDetails || {}), ...userData } });
+        }
+        go(3);
+      },
     }
   );
 
@@ -47,7 +93,12 @@ const BusinessProfile = () => {
     () => (
       <div className={clsx("py-8")}>
         <div className="flex flex-col items-center gap-10">
-          <img src="/assets/png/logo.png" alt="Wethtax" width={136} height={37} />
+          <img
+            src="/assets/png/logo.png"
+            alt="Wethtax"
+            width={136}
+            height={37}
+          />
 
           <Stepper steps={steps} active={step} />
         </div>
@@ -56,10 +107,13 @@ const BusinessProfile = () => {
     [step]
   );
 
-  const go = (n: number) => {
-    setStep(n);
-    onSetParams({ step: n });
-  };
+  const go = useCallback(
+    (n: number) => {
+      setStep(n);
+      onSetParams({ step: n });
+    },
+    [onSetParams]
+  );
 
   const buildPayload = (v: Partial<AllValues>) => {
     return {
@@ -84,46 +138,80 @@ const BusinessProfile = () => {
     };
   };
 
+  useEffect(() => {
+    if (!authDetails?.identity_verified) {
+      go(1);
+      return;
+    }
+
+    if (!authDetails?.company_profile?.first_time_filling) {
+      go(2);
+      return;
+    }
+
+    if (!authDetails?.tax_payer_id_verified) {
+      go(3);
+      return;
+    }
+
+    go(4);
+  }, [authDetails, go, step]);
+
   return (
-    <div className="pt-2 pb-10">
-      {header}
-
-      {step === 1 && (
-        <BusinessIdentificationStep
-          defaultValues={values}
-          onSubmit={(v: BusinessIdentificationValues) => {
-            setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
-            go(2);
+    <>
+      {isVerify && (
+        <OTP
+          loading={confirming}
+          onSubmit={async (code) => {
+            await confirmOtp({
+              id_type: "CAC",
+              id_number:
+                (params.get("id_number") as string) ||
+                (values.regNo as string) ||
+                "",
+              otp: code,
+            });
           }}
         />
       )}
 
-      {step === 2 && (
-        <CompanyDetailsStep
-          defaultValues={values}
-          onBack={() => go(1)}
-          onSubmit={(v: CompanyDetailsValues) => {
-            setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
-            go(3);
-          }}
-        />
-      )}
+      {!isVerify && (
+        <div className="pt-2 pb-10">
+          {header}
 
-      {step === 3 && (
-        <BusinessTaxIdStep
-          defaultValues={values}
-          loading={isPending}
-          onBack={() => go(2)}
-          onSubmit={async (v: BusinessTaxIdValues) => {
-            const merged = { ...values, ...v } as AllValues;
-            setValues(merged);
-            await updateCompany(buildPayload(merged));
-          }}
-        />
-      )}
+          {step === 1 && (
+            <BusinessIdentificationStep
+              defaultValues={values}
+              loading={verifying}
+              onSubmit={async (v: BusinessIdentificationValues) => {
+                setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
+                await verifyIdentity({ id_type: "CAC", id_number: v.regNo });
+              }}
+            />
+          )}
 
-      {step === 4 && <SuccessStep onProceed={() => navigate("/dashboard")} />}
-    </div>
+          {step === 2 && (
+            <CompanyDetailsStep
+              defaultValues={values}
+              loading={updating}
+              onSubmit={async (v: CompanyDetailsValues) => {
+                const merged = { ...values, ...v } as AllValues;
+                setValues(merged);
+                await updateCompany(buildPayload(merged));
+              }}
+            />
+          )}
+
+          {step === 3 && (
+            <BusinessTaxIdStep defaultValues={values} onSubmit={() => go(4)} />
+          )}
+
+          {step === 4 && (
+            <SuccessStep onProceed={() => navigate("/dashboard")} />
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

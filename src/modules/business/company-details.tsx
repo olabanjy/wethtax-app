@@ -27,11 +27,11 @@ export type CompanyDetailsValues = {
 export function CompanyDetailsStep({
   defaultValues,
   onSubmit,
-  onBack,
+  loading,
 }: {
   defaultValues?: Partial<CompanyDetailsValues>;
   onSubmit: (values: CompanyDetailsValues) => void;
-  onBack: () => void;
+  loading?: boolean;
 }) {
   const {
     control,
@@ -256,12 +256,13 @@ export function CompanyDetailsStep({
           "pt-5 border-t border-border"
         )}
       >
-        <Button variant="outline" size="xl" type="button" onClick={onBack}>
-          Back
-        </Button>
-
-        <Button size="xl" type="submit" disabled={!isValid}>
-          Save & Continue
+        <Button
+          className="w-full"
+          size="xl"
+          type="submit"
+          disabled={!isValid || loading}
+        >
+          {loading ? "Saving..." : "Save & Continue"}
         </Button>
       </div>
     </form>
