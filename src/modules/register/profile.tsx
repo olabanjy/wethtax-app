@@ -1,8 +1,8 @@
-import LoginForm from "@/modules/login/login-form";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
+import { RegisterForm } from "./form/register-form";
 
-const Login = () => {
+const Profile = () => {
   return (
     <div className="py-14">
       <div
@@ -22,32 +22,22 @@ const Login = () => {
                 "text-center mb-4"
               )}
             >
-              Welcome back!
+              Sign up to create an account
             </h1>
 
             <p className={clsx("leading-[21px] text-[#898989] text-center")}>
-              Are you new to Wethtax?{" "}
-              <Link to="/register?step=2" className="font-[600] text-[#7879C5]">
-                Create Account
+              Already have an account?{" "}
+              <Link to="/login" className="font-[600] text-[#7879C5]">
+                Login
               </Link>
             </p>
           </div>
         </div>
 
-        <LoginForm />
-
-        <div className="w-full flex flex-col items-center gap-4">
-          <Link to="/forgot-tax-id" className="font-[500] text-[#7879C5]">
-            Forgot Tax ID Number
-          </Link>
-
-          <Link to="/create-tax-id" className="font-[500] text-[#7879C5]">
-            Create New Tax ID Number
-          </Link>
-        </div>
+        <RegisterForm />
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Profile;
