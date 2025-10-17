@@ -1,12 +1,23 @@
-import Home from "@/pages/dashboard/home"
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes } from "react-router-dom";
+
+import Register from "@/pages/auth/register";
+import Home from "@/pages/dashboard/home";
+import Login from "@/pages/auth/login";
+import IndividualProfile from "@/pages/auth/individual-profile";
+import BusinessProfile from "@/pages/auth/business-profile";
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-    </Routes>
-  )
-}
+      <Route index path="/" element={<Register />} />
+      <Route index path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/individual-profile" element={<IndividualProfile />} />
+      <Route path="/business-profile" element={<BusinessProfile />} />
 
-export default AppRouter
+      <Route path="/dashboard" element={<Home />} />
+    </Routes>
+  );
+};
+
+export default AppRouter;

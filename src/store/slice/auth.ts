@@ -1,8 +1,9 @@
 import { type StateCreator } from "zustand";
 
 type IAuth = {
-  token: string;
-  details: null;
+  token: string; // access token
+  refresh: string;
+  details: unknown | null; // user details
 };
 
 export type AuthSlice = {
@@ -14,6 +15,7 @@ export type AuthSlice = {
 const values = {
   auth: {
     token: "",
+    refresh: "",
     details: null,
   },
 };
