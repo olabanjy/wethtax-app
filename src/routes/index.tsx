@@ -6,18 +6,21 @@ import Login from "@/pages/auth/login";
 import IndividualProfile from "@/pages/auth/individual-profile";
 import BusinessProfile from "@/pages/auth/business-profile";
 import ForgotPassword from "@/pages/auth/forgot-password";
+import Layout from "@/components/layout/layout";
 
 const AppRouter = () => {
   return (
     <Routes>
-      <Route index path="/" element={<Register />} />
-      <Route index path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/individual-profile" element={<IndividualProfile />} />
-      <Route path="/business-profile" element={<BusinessProfile />} />
+      <Route index element={<Register />} />
+      <Route index path="register" element={<Register />} />
+      <Route path="login" element={<Login />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="individual-profile" element={<IndividualProfile />} />
+      <Route path="business-profile" element={<BusinessProfile />} />
 
-      <Route path="/dashboard" element={<Home />} />
+      <Route path="dashboard" element={<Layout />}>
+        <Route index element={<Home />} />
+      </Route>
     </Routes>
   );
 };
