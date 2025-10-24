@@ -1,4 +1,3 @@
-import Layout from "@/components/layout/layout";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { BarChart, StatsContainer } from "@/modules/dashboard/home";
@@ -75,7 +74,6 @@ const Home = () => {
   }, [year]);
 
   return (
-    <Layout>
       <div className="w-full space-y-6">
         <h1 className={clsx("text-xl leading-[30px] text-[#717171]")}>
           Welcome,{" "}
@@ -98,7 +96,6 @@ const Home = () => {
           values={values}
         />
       </div>
-    </Layout>
   );
 };
 

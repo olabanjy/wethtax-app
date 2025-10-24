@@ -1,16 +1,13 @@
 import clsx from "clsx";
 import Sidebar from "./sidebar";
 import Topbar from "./topbar";
+import { Outlet } from "react-router-dom";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
   return (
     <div
       className={clsx(
-        "w-full grid grid-cols-[260px_1fr]",
+        "w-full grid grid-cols-[16.25rem_1fr]",
         "h-dvh overflow-y-hidden"
       )}
     >
@@ -21,11 +18,11 @@ const Layout = ({ children }: LayoutProps) => {
 
         <div
           className={clsx(
-            "w-full h-[calc(100dvh-92px)] bg-[#F5F5F5]",
+            "w-full h-[calc(100dvh-5.75rem)] bg-[#F5F5F5]",
             "overflow-y-auto py-6 pl-10 pr-16"
           )}
         >
-          {children}
+          <Outlet />
         </div>
 
         <div

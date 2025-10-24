@@ -12,14 +12,24 @@ const sideLinks: SideLinkProps[] = [
   {
     icon: <MdHomeFilled size={24} />,
     title: "Home",
-    subLinks: [],
+    href: "/dashboard",
   },
   {
     icon: <Files size={24} />,
     title: "File Returns",
     subLinks: [
       {
-        icon: <Files size={24} />,
+        icon: <Files size={16} />,
+        title: "File Returns",
+        href: "/",
+      },
+      {
+        icon: <Files size={16} />,
+        title: "File Returns",
+        href: "/",
+      },
+      {
+        icon: <Files size={16} />,
         title: "File Returns",
         href: "/",
       },
@@ -35,7 +45,7 @@ const sideLinks: SideLinkProps[] = [
     title: "Help & Support",
     subLinks: [
       {
-        icon: <MdSupportAgent size={24} />,
+        icon: <MdSupportAgent size={16} />,
         title: "Help & Support",
         href: "/",
       },
@@ -43,7 +53,7 @@ const sideLinks: SideLinkProps[] = [
   },
 ];
 
-const Sidebar = ({ active = "Home" }: { active?: string }) => {
+const Sidebar = () => {
   return (
     <div
       className={clsx(
@@ -69,7 +79,6 @@ const Sidebar = ({ active = "Home" }: { active?: string }) => {
               <SideLink
                 key={link.title}
                 {...link}
-                isActive={active === link.title}
               />
             ))}
           </div>
@@ -79,7 +88,7 @@ const Sidebar = ({ active = "Home" }: { active?: string }) => {
               icon={<Settings size={24} />}
               title="Settings"
               subLinks={[
-                { icon: <Settings size={24} />, title: "Settings", href: "/" },
+                { icon: <Settings size={16} />, title: "Settings", href: "/" },
               ]}
             />
           </div>
