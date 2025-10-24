@@ -58,9 +58,15 @@ export const useSend = <Variables, T = unknown>(
         message: string;
         error: string;
         statusCode: number;
+        errors: Record<string, string[]>;
       }>;
+      const axiosErrors = error?.response?.data?.errors ?? {};
       const axiosError = error?.response?.data?.message;
-      const axiosErrorMessage = errorMessage ?? axiosError ?? 'An error occurred';
+      const axiosErrorMessage =
+        errorMessage ??
+        axiosError ??
+        Object.values(axiosErrors)[0][0] ??
+        "An error occurred";
       if (!["error", "all"].includes(hideToast)) toast.error(axiosErrorMessage);
     },
   });
