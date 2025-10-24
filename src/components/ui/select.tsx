@@ -15,6 +15,8 @@ type SelectProps = {
   value?: string;
   onChange?: (value: string) => void;
   className?: string;
+  size?: string;
+  chevronClassName?: string;
   disabled?: boolean;
   "aria-invalid"?: boolean | "true" | "false";
   error?: string;
@@ -27,6 +29,8 @@ export function Select({
   onChange,
   className,
   disabled,
+  size,
+  chevronClassName,
   "aria-invalid": ariaInvalid,
   error,
 }: SelectProps) {
@@ -68,6 +72,7 @@ export function Select({
             "dark:bg-input/30 border-input h-14 w-full rounded-md border bg-transparent px-4 text-left text-base flex items-center justify-between transition-[color,box-shadow] outline-none",
             "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] cursor-pointer",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+            size,
             ariaInvalid && "border-destructive ring-destructive/20"
           )}
         >
@@ -79,6 +84,7 @@ export function Select({
             aria-hidden
             className={cn(
               "size-5 text-muted-foreground transition-transform",
+              chevronClassName,
               open && "rotate-180"
             )}
           />
@@ -119,9 +125,7 @@ export function Select({
             )}
           </ul>
         </div>
-        {error && (
-          <p className="mt-1 text-sm text-destructive">{error}</p>
-        )}
+        {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
       </div>
     </ClickAwayListener>
   );
