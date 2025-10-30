@@ -36,7 +36,7 @@ const Login = () => {
 
         <LoginForm />
 
-        <div className="w-full flex flex-col items-center gap-4">
+        {/* <div className="w-full flex flex-col items-center gap-4">
           <Link to="/forgot-tax-id" className="font-[500] text-[#7879C5]">
             Forgot Tax ID Number
           </Link>
@@ -44,7 +44,7 @@ const Login = () => {
           <Link to="/create-tax-id" className="font-[500] text-[#7879C5]">
             Create New Tax ID Number
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

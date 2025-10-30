@@ -55,12 +55,12 @@ const LoginForm = () => {
 
         if (
           data?.user?.user_type === "Individual" &&
-          !data?.user?.tax_payer_id_verified
+          !data?.user?.profile?.tax_payer_id
         ) {
           navigate("/individual-profile");
         } else if (
           data?.user?.user_type === "Company" &&
-          !data?.user?.tax_payer_id_verified
+          !data?.user?.profile?.tax_payer_id
         ) {
           navigate("/business-profile");
         } else {
