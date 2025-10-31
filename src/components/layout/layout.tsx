@@ -2,18 +2,18 @@ import clsx from "clsx";
 import Sidebar from "./sidebar";
 import Topbar from "./topbar";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useStore } from "@/store";
 import { useEffect } from "react";
+import useUser from "@/hooks/use-user-type";
 
 const Layout = () => {
-  const auth = useStore((s) => s.auth);
+  const { isLoggedIn } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!auth.token) {
+    if (!isLoggedIn) {
       navigate("/login");
     }
-  }, [auth.token, navigate]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <div

@@ -94,7 +94,14 @@ const IndividualProfile = () => {
     successMessage: "Tax ID Updated",
     onSuccess: () => {
       setAuth({
-        details: { ...(authDetails || {}), tax_payer_id_verified: true },
+        details: {
+          ...(authDetails || {}),
+          tax_payer_id_verified: true,
+          profile: {
+            ...(authDetails?.profile || {}),
+            tax_payer_id: values.taxId,
+          },
+        },
       });
       go(4);
     },

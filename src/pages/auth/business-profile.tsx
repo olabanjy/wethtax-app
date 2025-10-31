@@ -1,13 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Stepper } from "@/components/ui/stepper";
 import { useSearchQuery } from "@/hooks/use-search-query";
 import {
   BusinessIdentificationStep,
   CompanyDetailsStep,
-  BusinessTaxIdStep,
+  StateTaxIdStep,
+  FederalTaxIdStep,
   SuccessStep,
   type BusinessIdentificationValues,
   type CompanyDetailsValues,
-  type BusinessTaxIdValues,
+  type StateTaxIdValues,
+  type FederalTaxIdValues,
 } from "@/modules/business";
 import { useSend } from "@/hooks/use-send";
 import OTP from "@/modules/otp";
@@ -18,12 +21,14 @@ import { useNavigate } from "react-router-dom";
 
 type AllValues = BusinessIdentificationValues &
   CompanyDetailsValues &
-  BusinessTaxIdValues;
+  StateTaxIdValues &
+  FederalTaxIdValues;
 
 const steps = [
   { number: 1, label: "Identification" },
   { number: 2, label: "Company Details" },
-  { number: 3, label: "Tax ID Number" },
+  { number: 3, label: "State Tax ID Number" },
+  { number: 4, label: "FIRS Tax ID Number" },
 ];
 
 const BusinessProfile = () => {
@@ -87,6 +92,27 @@ const BusinessProfile = () => {
     }
   );
 
+  const { mutateAsync: updateTaxPayerId, isPending: updatingTaxId } = useSend<
+    { tax_payer_id: string },
+    any
+  >("/tenant/lagos/api/v1/ums/profile/update/tax-payer-id/", {
+    method: "patch",
+    successMessage: "State Tax ID Updated",
+    onSuccess: () => {
+      setAuth({
+        details: {
+          ...(authDetails || {}),
+          tax_payer_id_verified: true,
+          company_profile: {
+            ...(authDetails?.company_profile || {}),
+            tax_payer_id: values.stateTaxId,
+          },
+        },
+      });
+      go(4);
+    },
+  });
+
   useEffect(() => setStep(current), [current]);
 
   const header = useMemo(
@@ -139,7 +165,7 @@ const BusinessProfile = () => {
   };
 
   useEffect(() => {
-    if (!authDetails?.identity_verified) {
+    if (!authDetails?.company_profile?.reg_no) {
       go(1);
       return;
     }
@@ -150,12 +176,17 @@ const BusinessProfile = () => {
     }
 
     if (!authDetails?.tax_payer_id_verified) {
+      if (step === 4) {
+        go(4);
+        return;
+      }
+
       go(3);
       return;
     }
 
-    go(4);
-  }, [authDetails, go, step]);
+    go(5);
+  }, [authDetails, step]);
 
   return (
     <>
@@ -203,10 +234,28 @@ const BusinessProfile = () => {
           )}
 
           {step === 3 && (
-            <BusinessTaxIdStep defaultValues={values} onSubmit={() => go(4)} />
+            <StateTaxIdStep
+              defaultValues={values}
+              loading={updatingTaxId}
+              onSubmit={async (v: StateTaxIdValues) => {
+                setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
+                await updateTaxPayerId({ tax_payer_id: v.stateTaxId });
+              }}
+              onSkip={() => go(4)}
+            />
           )}
 
           {step === 4 && (
+            <FederalTaxIdStep
+              defaultValues={values}
+              onSubmit={(v: FederalTaxIdValues) => {
+                setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
+                go(5);
+              }}
+            />
+          )}
+
+          {step === 5 && (
             <SuccessStep onProceed={() => navigate("/dashboard")} />
           )}
         </div>

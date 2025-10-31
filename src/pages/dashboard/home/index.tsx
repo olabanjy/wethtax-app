@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { BarChart, StatsContainer } from "@/modules/dashboard/home";
-import { useStore } from "@/store";
+import useUser from "@/hooks/use-user-type";
 
 const Home = () => {
-  const { details: user } = useStore((s) => s.auth);
+  const { user, type } = useUser();
 
   const [year, setYear] = useState<number>(new Date().getFullYear());
 
@@ -76,6 +76,16 @@ const Home = () => {
     ];
   }, [year]);
 
+  const name = useMemo(() => {
+    if (!user) return "";
+
+    if (type === "Company") {
+      return `${user.company_profile?.name}`;
+    }
+
+    return `${user.first_name} ${user.other_name} ${user.last_name}`;
+  }, [user, type]);
+
   return (
     <div className="w-full space-y-6">
       <h1 className={clsx("text-xl leading-[30px] text-[#717171]")}>
@@ -85,7 +95,7 @@ const Home = () => {
             "text-2xl leading-[30px] font-[500] text-[#121212] capitalize"
           )}
         >
-          {user?.first_name} {user?.other_name} {user?.last_name}
+          {name}
         </span>
       </h1>
 
