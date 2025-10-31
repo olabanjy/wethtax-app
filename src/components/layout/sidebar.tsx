@@ -7,6 +7,7 @@ import {
 } from "react-icons/md";
 import type { SideLinkProps } from "./side-link";
 import SideLink from "./side-link";
+import { removeLS } from "@/lib/utils";
 
 const sideLinks: SideLinkProps[] = [
   {
@@ -76,10 +77,7 @@ const Sidebar = () => {
             )}
           >
             {sideLinks.map((link) => (
-              <SideLink
-                key={link.title}
-                {...link}
-              />
+              <SideLink key={link.title} {...link} />
             ))}
           </div>
 
@@ -98,8 +96,13 @@ const Sidebar = () => {
       <button
         className={clsx(
           "w-full h-11 px-6 text-[#898989] outline-none",
-          "flex items-center gap-3 cursor-pointer"
+          "flex items-center gap-3 cursor-pointer hover:text-red-500",
+          "transition-all duration-300"
         )}
+        onClick={() => {
+          removeLS("wethtax_frontend");
+          window.location.href = "/login";
+        }}
       >
         <LogOut size={24} />
 

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import clsx from "clsx";
 import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export type TaxIdValues = { taxId: string };
 
@@ -22,6 +23,8 @@ export function TaxIdStep({
     mode: "onChange",
     defaultValues: { taxId: "", ...defaultValues },
   });
+
+  const navigate = useNavigate();
 
   return (
     <form
@@ -73,12 +76,22 @@ export function TaxIdStep({
 
       <div
         className={clsx(
-          "w-full flex items-center gap-4 justify-end",
-          "pt-5 border-t border-border"
+          "w-full gap-4 justify-end",
+          "pt-5 border-t border-border",
+          "grid grid-cols-3"
         )}
       >
         <Button
-          className="w-full"
+          variant="outline"
+          type="button"
+          size="xl"
+          onClick={() => navigate("/dashboard")}
+        >
+          Skip
+        </Button>
+
+        <Button
+          className="w-full col-span-2"
           size="xl"
           type="submit"
           disabled={!isValid || loading}

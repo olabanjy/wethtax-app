@@ -1,8 +1,11 @@
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { BarChart, StatsContainer } from "@/modules/dashboard/home";
+import { useStore } from "@/store";
 
 const Home = () => {
+  const { details: user } = useStore((s) => s.auth);
+
   const [year, setYear] = useState<number>(new Date().getFullYear());
 
   const stats = useMemo(
@@ -74,28 +77,28 @@ const Home = () => {
   }, [year]);
 
   return (
-      <div className="w-full space-y-6">
-        <h1 className={clsx("text-xl leading-[30px] text-[#717171]")}>
-          Welcome,{" "}
-          <span
-            className={clsx(
-              "text-2xl leading-[30px] font-[500] text-[#121212]"
-            )}
-          >
-            John Ebuka Doe
-          </span>
-        </h1>
+    <div className="w-full space-y-6">
+      <h1 className={clsx("text-xl leading-[30px] text-[#717171]")}>
+        Welcome,{" "}
+        <span
+          className={clsx(
+            "text-2xl leading-[30px] font-[500] text-[#121212] capitalize"
+          )}
+        >
+          {user?.first_name} {user?.other_name} {user?.last_name}
+        </span>
+      </h1>
 
-        <StatsContainer year={year} onYearChange={setYear} stats={stats} />
+      <StatsContainer year={year} onYearChange={setYear} stats={stats} />
 
-        <BarChart
-          title="Tax Returns"
-          year={year}
-          onYearChange={setYear}
-          labels={labels}
-          values={values}
-        />
-      </div>
+      <BarChart
+        title="Tax Returns"
+        year={year}
+        onYearChange={setYear}
+        labels={labels}
+        values={values}
+      />
+    </div>
   );
 };
 

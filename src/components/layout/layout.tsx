@@ -1,9 +1,20 @@
 import clsx from "clsx";
 import Sidebar from "./sidebar";
 import Topbar from "./topbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useStore } from "@/store";
+import { useEffect } from "react";
 
 const Layout = () => {
+  const auth = useStore((s) => s.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth.token) {
+      navigate("/login");
+    }
+  }, [auth.token, navigate]);
+
   return (
     <div
       className={clsx(
