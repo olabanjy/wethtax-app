@@ -92,11 +92,17 @@ const IndividualProfile = () => {
   >("/tenant/lagos/api/v1/ums/profile/update/tax-payer-id/", {
     method: "patch",
     successMessage: "Tax ID Updated",
-    onSuccess: (data) => {
-      const userData = (data as any)?.data ?? data;
-      if (userData) {
-        setAuth({ details: { ...(authDetails || {}), ...userData } });
-      }
+    onSuccess: () => {
+      setAuth({
+        details: {
+          ...(authDetails || {}),
+          tax_payer_id_verified: true,
+          profile: {
+            ...(authDetails?.profile || {}),
+            tax_payer_id: values.taxId,
+          },
+        },
+      });
       go(4);
     },
   });

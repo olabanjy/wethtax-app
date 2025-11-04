@@ -3,7 +3,7 @@ import { type StateCreator } from "zustand";
 type IAuth = {
   token: string; // access token
   refresh: string;
-  details: unknown | null; // user details
+  details: any | null; // user details
 };
 
 export type AuthSlice = {

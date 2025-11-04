@@ -2,29 +2,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import clsx from "clsx";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
-export type TaxIdValues = { taxId: string };
+export type StateTaxIdValues = { stateTaxId: string };
 
-export function TaxIdStep({
+export function StateTaxIdStep({
   defaultValues,
   onSubmit,
-  loading = false,
+  loading,
+  onSkip,
 }: {
-  defaultValues?: Partial<TaxIdValues>;
-  onSubmit: (v: TaxIdValues) => void;
+  defaultValues?: Partial<StateTaxIdValues>;
+  onSubmit: (values: StateTaxIdValues) => void | Promise<void>;
   loading?: boolean;
+  onSkip?: () => void;
 }) {
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<TaxIdValues>({
+  } = useForm<StateTaxIdValues>({
     mode: "onChange",
-    defaultValues: { taxId: "", ...defaultValues },
+    defaultValues: { stateTaxId: "", ...defaultValues },
   });
-
-  const navigate = useNavigate();
 
   return (
     <form
@@ -37,17 +36,17 @@ export function TaxIdStep({
     >
       <div className={clsx("text-center pb-3 border-b border-border")}>
         <h2 className="text-2xl font-[500] leading-[36px] text-primary mb-2">
-          Tax ID Number
+          State Tax ID Number
         </h2>
 
         <p className="text-[20px] text-primary-grey">
-          Let's set up your Lagos Inland Revenue Service
+          Let's set up your Revenue Services
         </p>
       </div>
 
       <Controller
         control={control}
-        name="taxId"
+        name="stateTaxId"
         rules={{
           required: "Enter your State IRS Taxpayer ID Number",
           pattern: {
@@ -58,7 +57,7 @@ export function TaxIdStep({
         render={({ field: { value, onChange, ...rest } }) => (
           <Input
             placeholder="N-XXXXXXXX"
-            error={errors.taxId?.message}
+            error={errors.stateTaxId?.message}
             value={value ?? ""}
             maxLength={10}
             inputMode="numeric"
@@ -74,18 +73,13 @@ export function TaxIdStep({
         )}
       />
 
-      <div
-        className={clsx(
-          "w-full gap-4 justify-end",
-          "pt-5 border-t border-border",
-          "grid grid-cols-3"
-        )}
-      >
+      <div className="w-full gap-4 justify-end grid grid-cols-3">
         <Button
           variant="outline"
-          type="button"
           size="xl"
-          onClick={() => navigate("/dashboard")}
+          type="button"
+          onClick={onSkip}
+          className="w-full col-span-1"
         >
           Skip
         </Button>
