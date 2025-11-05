@@ -38,6 +38,8 @@ const BusinessProfile = () => {
   const [step, setStep] = useState<number>(current);
   const [values, setValues] = useState<Partial<AllValues>>({});
 
+  const [skipStateTaxId, setSkipStateTaxId] = useState(false);
+
   const [isVerify, setIsVerify] = useState(false);
 
   const setAuth = useStore((s) => s.setAuth);
@@ -192,7 +194,7 @@ const BusinessProfile = () => {
       return;
     }
 
-    if (!authDetails?.company_profile?.tax_payer_id) {
+    if (!authDetails?.company_profile?.tax_payer_id && !skipStateTaxId) {
       go(3);
       return;
     }
@@ -261,7 +263,10 @@ const BusinessProfile = () => {
                   tax_payer_id_type: "State",
                 });
               }}
-              onSkip={() => go(4)}
+              onSkip={() => {
+                setSkipStateTaxId(true);
+                go(4);
+              }}
             />
           )}
 
