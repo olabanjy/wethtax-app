@@ -11,7 +11,7 @@ A modern **React** application setup powered by **Vite**, styled with **Shadcn/U
 - 🎨 **Shadcn/UI** — Prebuilt, themeable UI components using Radix & Tailwind  
 - 🧠 **Zustand** — Lightweight state management  
 - 🔗 **TanStack Query (React Query)** — Data fetching and caching  
-- 💨 **Tailwind CSS** — Utility-first styling .
+- 💨 **Tailwind CSS** — Utility-first styling ..
 
 ---
 
