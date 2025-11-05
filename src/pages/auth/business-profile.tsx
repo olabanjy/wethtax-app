@@ -93,23 +93,40 @@ const BusinessProfile = () => {
   );
 
   const { mutateAsync: updateTaxPayerId, isPending: updatingTaxId } = useSend<
-    { tax_payer_id: string },
+    { tax_payer_id: string; tax_payer_id_type: string },
     any
   >("/tenant/lagos/api/v1/ums/profile/update/tax-payer-id/", {
     method: "patch",
-    successMessage: "State Tax ID Updated",
-    onSuccess: () => {
-      setAuth({
-        details: {
-          ...(authDetails || {}),
-          tax_payer_id_verified: true,
-          company_profile: {
-            ...(authDetails?.company_profile || {}),
-            tax_payer_id: values.stateTaxId,
+    successMessage: "Tax ID Updated",
+    onSuccess: (_response, payload) => {
+      const id = payload?.tax_payer_id;
+      const type = String(payload?.tax_payer_id_type || "");
+
+      if (!id) return;
+
+      if (type === "State") {
+        setAuth({
+          details: {
+            ...(authDetails || {}),
+            company_profile: {
+              ...(authDetails?.company_profile || {}),
+              tax_payer_id: id,
+            },
           },
-        },
-      });
-      go(4);
+        });
+        go(4);
+      } else if (type === "Federal") {
+        setAuth({
+          details: {
+            ...(authDetails || {}),
+            company_profile: {
+              ...(authDetails?.company_profile || {}),
+              federal_tax_payer_id: id,
+            },
+          },
+        });
+        go(5);
+      }
     },
   });
 
@@ -175,13 +192,13 @@ const BusinessProfile = () => {
       return;
     }
 
-    if (!authDetails?.tax_payer_id_verified) {
-      if (step === 4) {
-        go(4);
-        return;
-      }
-
+    if (!authDetails?.company_profile?.tax_payer_id) {
       go(3);
+      return;
+    }
+
+    if (!authDetails?.company_profile?.federal_tax_payer_id) {
+      go(4);
       return;
     }
 
@@ -239,7 +256,10 @@ const BusinessProfile = () => {
               loading={updatingTaxId}
               onSubmit={async (v: StateTaxIdValues) => {
                 setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
-                await updateTaxPayerId({ tax_payer_id: v.stateTaxId });
+                await updateTaxPayerId({
+                  tax_payer_id: v.stateTaxId,
+                  tax_payer_id_type: "State",
+                });
               }}
               onSkip={() => go(4)}
             />
@@ -248,8 +268,12 @@ const BusinessProfile = () => {
           {step === 4 && (
             <FederalTaxIdStep
               defaultValues={values}
-              onSubmit={(v: FederalTaxIdValues) => {
+              onSubmit={async (v: FederalTaxIdValues) => {
                 setValues((p: Partial<AllValues>) => ({ ...p, ...v }));
+                await updateTaxPayerId({
+                  tax_payer_id: v.firsTaxId,
+                  tax_payer_id_type: "Federal",
+                });
                 go(5);
               }}
             />

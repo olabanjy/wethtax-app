@@ -60,7 +60,8 @@ const LoginForm = () => {
           navigate("/individual-profile");
         } else if (
           data?.user?.user_type === "Company" &&
-          !data?.user?.company_profile?.tax_payer_id
+          (!data?.user?.company_profile?.tax_payer_id ||
+            !data?.user?.company_profile?.federal_tax_payer_id)
         ) {
           navigate("/business-profile");
         } else {
