@@ -37,7 +37,7 @@ const YearSelect = ({
       ) : null}
 
       <Select
-        className="w-auto min-w-[92px]"
+        className="w-auto min-w-[100px]"
         chevronClassName={className}
         size="!h-9"
         options={years

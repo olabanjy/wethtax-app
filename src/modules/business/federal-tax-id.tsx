@@ -59,7 +59,7 @@ export function FederalTaxIdStep({
           size="xl"
           type="button"
           variant="outline"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/company")}
         >
           Skip
         </Button>

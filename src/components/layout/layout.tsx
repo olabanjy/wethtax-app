@@ -4,9 +4,11 @@ import Topbar from "./topbar";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useUser from "@/hooks/use-user-type";
+import { individualSideLinks } from "./individual/sidebar";
+import { companySideLinks } from "./company/sidebar";
 
 const Layout = () => {
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, type } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +24,9 @@ const Layout = () => {
         "h-dvh overflow-y-hidden"
       )}
     >
-      <Sidebar />
+      <Sidebar
+        links={type === "Individual" ? individualSideLinks : companySideLinks}
+      />
 
       <main className={clsx("w-full h-full overflow-y-hidden")}>
         <Topbar />
