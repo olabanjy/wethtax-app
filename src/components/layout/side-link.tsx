@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { NavLink, useMatch } from "react-router-dom";
+import { NavLink, useMatch, useLocation } from "react-router-dom";
 
 export interface SideLinkProps {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   title: string;
   href?: string;
   subLinks?: SideLinkProps[];
@@ -35,8 +35,8 @@ const SideLinkItem = ({
       )}
     >
       <div className={cn("flex items-center gap-3")}>
-        {icon}
-        <p className={cn({ "text-sm": !isParent })}>{title}</p>
+        {icon && icon}
+        <p className={cn("text-sm")}>{title}</p>
       </div>
 
       {isParent && <ChevronDown size={20} />}
@@ -52,18 +52,33 @@ const SideLink = ({
 }: SideLinkProps) => {
   const [open, setOpen] = useState(false);
   const hasSubLinks = subLinks.length > 0;
+  const location = useLocation();
+
+  const anySubActive =
+    hasSubLinks &&
+    subLinks.some((link) => {
+      const href = link.href || "";
+      if (!href) return false;
+      if (href === "/") return location.pathname === "/";
+      return location.pathname.startsWith(href);
+    });
+
+  const isExpanded = anySubActive || open;
 
   return (
     <div>
       <SideLinkItem
         href={href}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => {
+          setOpen((prev) => !prev);
+        }}
         isParent={hasSubLinks}
         icon={icon}
         title={title}
       />
-      {open && hasSubLinks && (
-        <div className={cn("pl-3 bg-gray-50")}>
+
+      {isExpanded && hasSubLinks && (
+        <div className={cn("pl-3 flex flex-col gap-1")}>
           {subLinks.map((link) => (
             <SideLinkItem
               key={link.title}

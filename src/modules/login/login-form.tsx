@@ -65,7 +65,9 @@ const LoginForm = () => {
         ) {
           navigate("/business-profile");
         } else {
-          navigate("/dashboard");
+          navigate(
+            data?.user?.user_type === "Individual" ? "/dashboard" : "/company"
+          );
         }
       },
     }

@@ -1,9 +1,13 @@
 import clsx from "clsx";
 import Searchbar from "@/components/ui/searchbar";
 import Bell from "../ui/bell";
-import IAvatar from "../ui/avatar";
+import IAvatar from "./individual/avatar";
+import useUser from "@/hooks/use-user-type";
+import CAvatar from "./company/avatar";
 
 const Topbar = () => {
+  const { type } = useUser();
+
   return (
     <div
       className={clsx(
@@ -19,7 +23,7 @@ const Topbar = () => {
       <div className="flex items-center gap-4">
         <Bell />
 
-        <IAvatar />
+        {type === "Individual" ? <IAvatar /> : <CAvatar />}
       </div>
     </div>
   );

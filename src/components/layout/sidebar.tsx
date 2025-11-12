@@ -1,60 +1,10 @@
 import clsx from "clsx";
-import { Files, LogOut, Settings } from "lucide-react";
-import {
-  MdHomeFilled,
-  MdOutlineFilePresent,
-  MdSupportAgent,
-} from "react-icons/md";
+import { LogOut, Settings } from "lucide-react";
 import type { SideLinkProps } from "./side-link";
 import SideLink from "./side-link";
 import { removeLS } from "@/lib/utils";
 
-const sideLinks: SideLinkProps[] = [
-  {
-    icon: <MdHomeFilled size={24} />,
-    title: "Home",
-    href: "/dashboard",
-  },
-  {
-    icon: <Files size={24} />,
-    title: "File Returns",
-    subLinks: [
-      {
-        icon: <Files size={16} />,
-        title: "File Returns",
-        href: "/",
-      },
-      {
-        icon: <Files size={16} />,
-        title: "File Returns",
-        href: "/",
-      },
-      {
-        icon: <Files size={16} />,
-        title: "File Returns",
-        href: "/",
-      },
-    ],
-  },
-  {
-    icon: <MdOutlineFilePresent size={24} />,
-    title: "Filing History",
-    subLinks: [],
-  },
-  {
-    icon: <MdSupportAgent size={24} />,
-    title: "Help & Support",
-    subLinks: [
-      {
-        icon: <MdSupportAgent size={16} />,
-        title: "Help & Support",
-        href: "/",
-      },
-    ],
-  },
-];
-
-const Sidebar = () => {
+const Sidebar = ({ links }: { links: SideLinkProps[] }) => {
   return (
     <div
       className={clsx(
@@ -76,7 +26,7 @@ const Sidebar = () => {
               "pb-5 border-b border-[#E7E7E7]"
             )}
           >
-            {sideLinks.map((link) => (
+            {links.map((link) => (
               <SideLink key={link.title} {...link} />
             ))}
           </div>

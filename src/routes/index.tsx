@@ -8,6 +8,11 @@ import BusinessProfile from "@/pages/auth/business-profile";
 import ForgotPassword from "@/pages/auth/forgot-password";
 import Layout from "@/components/layout/layout";
 
+// company routes
+import Company from "@/pages/company";
+import MonthlyPAYE from "@/pages/company/monthly-paye";
+import AnnualReturn from "@/pages/company/annual-return";
+
 const AppRouter = () => {
   return (
     <Routes>
@@ -20,6 +25,12 @@ const AppRouter = () => {
 
       <Route path="dashboard" element={<Layout />}>
         <Route index element={<Home />} />
+      </Route>
+
+      <Route path="company" element={<Layout />}>
+        <Route index element={<Company />} />
+        <Route path="monthly-paye" element={<MonthlyPAYE />} />
+        <Route path="annual-returns" element={<AnnualReturn />} />
       </Route>
     </Routes>
   );

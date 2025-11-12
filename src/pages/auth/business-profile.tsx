@@ -285,7 +285,7 @@ const BusinessProfile = () => {
           )}
 
           {step === 5 && (
-            <SuccessStep onProceed={() => navigate("/dashboard")} />
+            <SuccessStep onProceed={() => navigate("/company")} />
           )}
         </div>
       )}
