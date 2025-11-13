@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 import Register from "@/pages/auth/register";
 import Home from "@/pages/dashboard/home";
@@ -12,6 +12,9 @@ import Layout from "@/components/layout/layout";
 import Company from "@/pages/company";
 import MonthlyPAYE from "@/pages/company/monthly-paye";
 import AnnualReturn from "@/pages/company/annual-return";
+import PersonalIncomeTax from "@/pages/individual/personal-income-tax";
+import FilePITStepOne from "@/pages/individual/personal-income-tax/compute/step-one";
+import ComputePITlayout from "@/components/layout/individual/compute-pit";
 
 const AppRouter = () => {
   return (
@@ -31,6 +34,15 @@ const AppRouter = () => {
         <Route index element={<Company />} />
         <Route path="monthly-paye" element={<MonthlyPAYE />} />
         <Route path="annual-returns" element={<AnnualReturn />} />
+      </Route>
+
+      <Route path="individual" element={<Layout />}>
+        <Route path="personal-income-tax" element={<Outlet />}>
+          <Route index element={<PersonalIncomeTax />} />
+          <Route path="compute" element={<ComputePITlayout />}>
+            <Route index element={<FilePITStepOne />} />
+          </Route>
+        </Route>
       </Route>
     </Routes>
   );

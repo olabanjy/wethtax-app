@@ -69,7 +69,7 @@ export function Select({
           disabled={disabled}
           onClick={() => setOpen((p) => !p)}
           className={cn(
-            "dark:bg-input/30 border-input h-14 w-full rounded-md border bg-transparent px-4 text-left text-base flex items-center justify-between transition-[color,box-shadow] outline-none",
+            "dark:bg-input/30 border-input h-14 w-full rounded border bg-transparent px-4 text-left text-base flex items-center justify-between transition-[color,box-shadow] outline-none",
             "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] cursor-pointer",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
             size,
