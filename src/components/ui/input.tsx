@@ -19,6 +19,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
 
   const isFocused = focused || Boolean(value);
 
+  const inputType = React.useMemo(() => {
+    if (type === "date") {
+      return isFocused ? "date" : "text";
+    }
+
+    return type;
+  }, [type, isFocused]);
+
   return (
     <div>
       {label && (
@@ -37,7 +45,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
         <input
           ref={ref}
           id={inputId}
-          type={type}
+          type={inputType}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           data-slot="input"

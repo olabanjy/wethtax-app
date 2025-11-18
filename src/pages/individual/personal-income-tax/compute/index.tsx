@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Label from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 
-const FilePITStepOne = () => {
+const ComputePIT = () => {
   const { handleSubmit } = useForm({
     defaultValues: {
       payerId: "",
@@ -15,21 +16,11 @@ const FilePITStepOne = () => {
     <form onSubmit={handleSubmit(() => {})}>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label
-            className="block mb-4 text-lg font-medium text-gray-700"
-            htmlFor="payerId"
-          >
-            Your Tax Payer ID
-          </label>
+          <Label htmlFor="payerId">Your Tax Payer ID</Label>
           <Input placeholder="Enter Number" />
         </div>
         <div>
-          <label
-            className="block mb-4 text-lg font-medium text-gray-700"
-            htmlFor="year"
-          >
-            Year in View
-          </label>
+          <Label htmlFor="year">Year in View</Label>
           <Select options={[]} placeholder="Select Year" />
         </div>
       </div>
@@ -43,4 +34,4 @@ const FilePITStepOne = () => {
   );
 };
 
-export default FilePITStepOne;
+export default ComputePIT;
