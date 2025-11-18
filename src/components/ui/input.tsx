@@ -2,10 +2,14 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-type InputProps = React.ComponentProps<"input"> & { error?: string };
+type InputProps = React.ComponentProps<"input"> & {
+  error?: string;
+  labelClass?: string;
+  label?: string;
+};
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, type, id, placeholder, error, ...props },
+  { className, labelClass, type, id, placeholder, error, label, ...props },
   ref
 ) {
   const [focused, setIsFocused] = React.useState(false);
@@ -17,6 +21,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <div>
+      {label && (
+        <p className="font-medium text-[#414141] mb-2">{label}</p>
+      )}
       <fieldset
         className={cn("relative h-14 border-input rounded border", {
           "border-[#414141] h-[4.1rem] -mt-2.5": isFocused,
@@ -58,7 +65,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
             "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-muted-foreground",
             "peer-focus:-top-5 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-foreground",
             "peer-[:not(:placeholder-shown)]:-top-5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs",
-            { "-top-10": Boolean(value) }
+            { "-top-10": Boolean(value) },
+            labelClass
           )}
         >
           {placeholder}
