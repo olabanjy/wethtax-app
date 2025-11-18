@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import DataTable from "@/components/ui/data-table";
 import type { TableColumn } from "@/components/ui/data-table";
 import YearSelect from "@/modules/dashboard/home/common/year-select";
+import { Link } from "react-router-dom";
 
 type MonthlyPayeRow = {
   month: string;
@@ -10,7 +11,6 @@ type MonthlyPayeRow = {
   referenceNo?: string;
   numEmployees?: number;
   status: "Filled" | "Not Filled";
-  actionHref: string;
 };
 
 const MonthlyPAYE = () => {
@@ -43,14 +43,16 @@ const MonthlyPAYE = () => {
         name: "Action",
         width: "180px",
         cell: (row) => (
-          <a
-            href={row.actionHref}
+          <Link
+            to={
+              row.status === "Not Filled" ? "/company/monthly-paye/file" : "#"
+            }
             className="text-[#7879C5] hover:underline shrink-0 text-left"
           >
             {row.status === "Not Filled"
               ? "Click to file return"
               : "View history"}
-          </a>
+          </Link>
         ),
         ignoreRowClick: true,
       },
@@ -63,7 +65,6 @@ const MonthlyPAYE = () => {
       {
         month: "April",
         status: "Not Filled",
-        actionHref: "#",
       },
       {
         month: "March",
@@ -71,7 +72,6 @@ const MonthlyPAYE = () => {
         referenceNo: "26542736",
         numEmployees: 35,
         status: "Not Filled",
-        actionHref: "#",
       },
       {
         month: "February",
@@ -79,7 +79,6 @@ const MonthlyPAYE = () => {
         referenceNo: "26542736",
         numEmployees: 12,
         status: "Filled",
-        actionHref: "#",
       },
       {
         month: "January",
@@ -87,7 +86,6 @@ const MonthlyPAYE = () => {
         referenceNo: "26542736",
         numEmployees: 15,
         status: "Filled",
-        actionHref: "#",
       },
     ],
     []
