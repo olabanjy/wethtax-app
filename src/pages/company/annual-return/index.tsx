@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import DataTable from "@/components/ui/data-table";
 import type { TableColumn } from "@/components/ui/data-table";
+import Tabs from "@/components/ui/tabs";
 
 type AnnualReturnRow = {
   year: number;
@@ -38,17 +39,20 @@ const AnnualReturn = () => {
     []
   );
 
-  const data: AnnualReturnRow[] = useMemo(
-    () => [
+  const [activeTab, setActiveTab] = useState("annual");
+
+  const data: AnnualReturnRow[] = useMemo(() => {
+    const baseHref = `/company/annual-returns/file/${activeTab}`;
+    return [
       {
         year: 2025,
         status: "Not Filled",
-        actionHref: "#",
+        actionHref: baseHref,
       },
       {
         year: 2024,
         status: "Not Filled",
-        actionHref: "#",
+        actionHref: baseHref,
       },
       {
         year: 2023,
@@ -60,15 +64,27 @@ const AnnualReturn = () => {
         status: "Filled",
         actionHref: "#",
       },
-    ],
-    []
-  );
+    ];
+  }, [activeTab]);
 
   return (
     <div className="w-full space-y-10">
       <h1 className="text-xl font-[600] text-[#121212]">Annual Returns</h1>
 
-      <DataTable columns={columns} data={data} />
+      <div className="w-full flex flex-col gap-6">
+        <Tabs
+          items={[
+            { label: "Annual Returns", value: "annual" },
+            { label: "Projection Returns", value: "projection" },
+            { label: "Withholding Tax", value: "withholding" },
+            { label: "Schedule Returns", value: "schedule" },
+          ]}
+          value={activeTab}
+          onChange={setActiveTab}
+        />
+
+        <DataTable columns={columns} data={data} />
+      </div>
     </div>
   );
 };

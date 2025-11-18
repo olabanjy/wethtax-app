@@ -20,6 +20,7 @@ type SelectProps = {
   disabled?: boolean;
   "aria-invalid"?: boolean | "true" | "false";
   error?: string;
+  title?: string;
 };
 
 export function Select({
@@ -33,6 +34,7 @@ export function Select({
   chevronClassName,
   "aria-invalid": ariaInvalid,
   error,
+  title,
 }: SelectProps) {
   const [open, setOpen] = React.useState(false);
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
@@ -60,6 +62,8 @@ export function Select({
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <div className={cn("relative w-full", className)}>
+        {title && <p className="font-medium text-[#414141] mb-2">{title}</p>}
+
         <button
           ref={buttonRef}
           type="button"

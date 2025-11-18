@@ -2,10 +2,14 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-type InputProps = React.ComponentProps<"input"> & { error?: string };
+type InputProps = React.ComponentProps<"input"> & {
+  error?: string;
+  labelClass?: string;
+  label?: string;
+};
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, type, id, placeholder, error, ...props },
+  { className, labelClass, type, id, placeholder, error, label, ...props },
   ref
 ) {
   const generatedId = React.useId();
@@ -13,6 +17,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <div>
+      {label && (
+        <p className="font-medium text-[#414141] mb-2">{label}</p>
+      )}
+
       <div className="relative">
         <input
           ref={ref}
@@ -39,7 +47,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
             "pointer-events-none bg-white absolute left-3 -top-2 rounded-sm px-1 text-xs text-foreground transition-all",
             "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-muted-foreground",
             "peer-focus:-top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-foreground",
-            "peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs"
+            "peer-[:not(:placeholder-shown)]:-top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs",
+            labelClass
           )}
         >
           {placeholder}
