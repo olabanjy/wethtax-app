@@ -17,19 +17,16 @@ export const individualSideLinks: SideLinkProps[] = [
     title: "File Returns",
     subLinks: [
       {
-        icon: <Files size={16} />,
-        title: "File Returns",
-        href: "/",
+        title: "Personal Income Tax (PIT)",
+        href: "/individual/personal-income-tax",
       },
       {
-        icon: <Files size={16} />,
-        title: "File Returns",
-        href: "/",
+        title: "Development Levy",
+        href: "/individual/development-levy",
       },
       {
-        icon: <Files size={16} />,
-        title: "File Returns",
-        href: "/",
+        title: "Employment Taxes (PAYE)",
+        href: "/individual/paye",
       },
     ],
   },

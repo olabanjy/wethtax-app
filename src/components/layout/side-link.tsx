@@ -16,11 +16,14 @@ const SideLinkItem = ({
   isParent,
   icon,
   title,
+  isSubActive,
 }: SideLinkProps & {
   onClick?: () => void;
   isParent?: boolean;
+  isSubActive?: boolean;
 }) => {
-  const isActive = useMatch({ path: href });
+  const location = useLocation();
+  const isActive = useMatch({ path: href }) || location.pathname.startsWith(href) || isSubActive;
 
   return (
     <NavLink
@@ -30,7 +33,7 @@ const SideLinkItem = ({
         "w-full h-11 pr-4 outline-none cursor-pointer hover:bg-[#F5F5F5]",
         "flex items-center justify-between",
         isActive
-          ? "font-[600] pl-2 text-[#2A2A2A] bg-[#F5F5F5] border-l-[6px] border-[#121212]"
+          ? `font-[600] pl-2 text-[#2A2A2A] bg-[#F5F5F5] ${isParent ? "border-l-[6px] border-[#121212]" : "border border-gray-200"}`
           : "text-[#898989] pl-4"
       )}
     >
@@ -75,10 +78,11 @@ const SideLink = ({
         isParent={hasSubLinks}
         icon={icon}
         title={title}
+        isSubActive={anySubActive}
       />
 
       {isExpanded && hasSubLinks && (
-        <div className={cn("pl-3 flex flex-col gap-1")}>
+        <div className={cn("pl-3 flex flex-col gap-1 my-2")}>
           {subLinks.map((link) => (
             <SideLinkItem
               key={link.title}

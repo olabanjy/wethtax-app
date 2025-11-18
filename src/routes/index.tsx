@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 import Register from "@/pages/auth/register";
 import Home from "@/pages/dashboard/home";
@@ -7,6 +7,9 @@ import IndividualProfile from "@/pages/auth/individual-profile";
 import BusinessProfile from "@/pages/auth/business-profile";
 import ForgotPassword from "@/pages/auth/forgot-password";
 import Layout from "@/components/layout/layout";
+import PersonalIncomeTax from "@/pages/individual/personal-income-tax";
+import ComputePIT from "@/pages/individual/personal-income-tax/compute";
+import ComputePITlayout from "@/components/layout/individual/compute-pit";
 
 // company routes
 import Company from "@/pages/company";
@@ -17,6 +20,10 @@ import CompanyFileAnnualReturn from "@/pages/company/annual-return/file/annual";
 import CompanyFileProjection from "@/pages/company/annual-return/file/projection";
 import CompanyFileWithholding from "@/pages/company/annual-return/file/withholding";
 import CompanyFileSchedule from "@/pages/company/annual-return/file/schedule";
+import AccommodationPIT from "@/pages/individual/personal-income-tax/compute/accommodation";
+import IncomePIT from "@/pages/individual/personal-income-tax/compute/income";
+import PITBill from "@/pages/individual/personal-income-tax/compute/bill";
+import PITSuccess from "@/pages/individual/personal-income-tax/success";
 
 const AppRouter = () => {
   return (
@@ -53,6 +60,19 @@ const AppRouter = () => {
           path="annual-returns/file/schedule"
           element={<CompanyFileSchedule />}
         />
+      </Route>
+
+      <Route path="individual" element={<Layout />}>
+        <Route path="personal-income-tax" element={<Outlet />}>
+          <Route index element={<PersonalIncomeTax />} />
+          <Route path="compute" element={<ComputePITlayout />}>
+            <Route index element={<ComputePIT />} />
+            <Route path="accommodation" element={<AccommodationPIT />} />
+            <Route path="income" element={<IncomePIT />} />
+            <Route path="bill" element={<PITBill />} />
+          </Route>
+          <Route path="success" element={<PITSuccess />} />
+        </Route>
       </Route>
     </Routes>
   );
