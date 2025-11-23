@@ -26,20 +26,23 @@ const AnnualReturn = () => {
 
   const normalizeRows = (resp: unknown): AnnualReturnRow[] => {
     const baseHref = `/company/annual-returns/file/${activeTab}`;
+    // Support multiple API response shapes:
+    // - Array
+    // - { data: [...] }
+    // - { results: [...], count, page, pages } (pagination)
     const items =
-      (Array.isArray(resp) ? resp : (resp as { data?: unknown })?.data) ?? [];
+      (Array.isArray(resp)
+        ? resp
+        : (resp as { results?: unknown[] })?.results ??
+          (resp as { data?: unknown[] })?.data) ?? [];
 
     if (!Array.isArray(items)) return [];
 
     return items.map((item: any) => {
-      const createdDate =
-        item?.createdAt ??
-        item?.created_at ??
-        item?.date ??
-        item?.updatedAt ??
-        new Date().toISOString();
+      const createdDate = item?.createdAt ?? item?.created_at ?? item?.date ?? item?.updatedAt ?? new Date().toISOString();
       const derivedYear = Number(
         item?.year ??
+          item?.company_return?.year ?? // schedule returns nested year
           item?.taxYear ??
           item?.tax_year ??
           String(createdDate).slice(0, 4)
@@ -66,16 +69,36 @@ const AnnualReturn = () => {
 
   const displayRows: AnnualReturnRow[] = useMemo(() => {
     if (isLoading) return [];
+    const currentYear = new Date().getFullYear();
+    const baseHref = `/company/annual-returns/file/${activeTab}`;
+    const MIN_YEARS = 4;
+
     if (!rows || rows.length === 0) {
-      const currentYear = new Date().getFullYear();
-      const baseHref = `/company/annual-returns/file/${activeTab}`;
-      return Array.from({ length: 5 }, (_, i) => ({
+      return Array.from({ length: Math.max(5, MIN_YEARS) }, (_, i) => ({
         year: currentYear - i,
         status: "Not Filled" as const,
         actionHref: `${baseHref}?year=${currentYear - i}`,
       }));
     }
-    return [...rows].sort((a, b) => b.year - a.year);
+
+    const sorted = [...rows].sort((a, b) => b.year - a.year);
+
+    if (sorted.length >= MIN_YEARS) return sorted;
+
+    const existingYears = new Set(sorted.map((r) => r.year));
+    const placeholders: AnnualReturnRow[] = [];
+    for (let i = 0; sorted.length + placeholders.length < MIN_YEARS; i += 1) {
+      const y = currentYear - i;
+      if (!existingYears.has(y)) {
+        placeholders.push({
+          year: y,
+          status: "Not Filled",
+          actionHref: `${baseHref}?year=${y}`,
+        });
+      }
+    }
+
+    return [...sorted, ...placeholders].sort((a, b) => b.year - a.year);
   }, [rows, isLoading, activeTab]);
 
   const columns: TableColumn<AnnualReturnRow>[] = useMemo(
