@@ -5,18 +5,9 @@ import {
   type UseFormRegister,
 } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
-import {
-  LucideChevronDown,
-  LucideTrash,
-} from "lucide-react";
+import { Select, type SelectOption } from "@/components/ui/select";
+import { LucideChevronDown, LucideTrash } from "lucide-react";
 import clsx from "clsx";
-
-const NATIONALITIES = [
-  { label: "Nigerian", value: "nigeria" },
-  { label: "Ghanaian", value: "ghana" },
-  { label: "Other", value: "other" },
-];
 
 export type ProjectionFiling = {
   lastName: string;
@@ -40,12 +31,14 @@ export default function ProjectionSingleForm({
   register,
   canDelete,
   onDelete,
+  nationalities,
 }: {
   index: number;
   control: Control<ProjectionFilingFormValues>;
   register: UseFormRegister<ProjectionFilingFormValues>;
   canDelete?: boolean;
   onDelete?: () => void;
+  nationalities: SelectOption[];
 }) {
   const [open, setOpen] = useState(true);
 
@@ -119,7 +112,7 @@ export default function ProjectionSingleForm({
           render={({ field }) => (
             <Select
               title="Nationality"
-              options={NATIONALITIES}
+              options={nationalities}
               placeholder="Select Nationality"
               value={field.value}
               onChange={field.onChange}
@@ -154,5 +147,3 @@ export default function ProjectionSingleForm({
     </div>
   );
 }
-
-

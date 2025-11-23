@@ -6,18 +6,16 @@ import {
 } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constant/states";
+import { useStates } from "@/hooks/use-states";
 import {
   LucideChevronDown,
   LucideCircleAlert,
   LucideTrash,
 } from "lucide-react";
 import clsx from "clsx";
-import { DatePicker } from "@/components/ui/date-picker";
 
 export type Filing = {
   tin: string;
-  month: string;
   state: string;
   basic: string;
   transport: string;
@@ -49,6 +47,7 @@ export default function SingleFilingForm({
   onDelete?: () => void;
 }) {
   const [open, setOpen] = useState(true);
+  const { options: stateOptions, isLoading: statesLoading } = useStates();
 
   return (
     <div
@@ -107,25 +106,13 @@ export default function SingleFilingForm({
 
         <Controller
           control={control}
-          name={`filings.${index}.month`}
-          render={({ field }) => (
-            <DatePicker
-              title="Month in View"
-              placeholder="Enter Month"
-              value={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
           name={`filings.${index}.state`}
           render={({ field }) => (
             <Select
               title="State of Operation"
-              options={STATES}
-              placeholder="Select State"
+              options={stateOptions}
+              placeholder={statesLoading ? "Loading..." : "Select State"}
+              disabled={statesLoading}
               value={field.value}
               onChange={field.onChange}
             />
@@ -181,7 +168,7 @@ export default function SingleFilingForm({
           labelClass="!bg-[#f5f5f5]"
         />
 
-        <div className="col-span-2">
+        {/* <div className="col-span-2">
           <Input
             label="Gross Emolument"
             placeholder="Enter Amount"
@@ -202,7 +189,7 @@ export default function SingleFilingForm({
           placeholder="Enter Amount"
           {...register(`filings.${index}.consolidatedRelief`)}
           labelClass="!bg-[#f5f5f5]"
-        />
+        /> */}
       </div>
     </div>
   );
