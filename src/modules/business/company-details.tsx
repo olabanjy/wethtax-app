@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constant/states";
-import { TAX_STATIONS } from "@/constant/profile";
-import { getLcdasFor, getLgasForState } from "@/constant/locations";
+import { STATES } from "@/constants/states";
+import { TAX_STATIONS } from "@/constants/profile";
+import { getLcdasFor, getLgasForState } from "@/constants/locations";
 import clsx from "clsx";
 import { Controller, useForm } from "react-hook-form";
 

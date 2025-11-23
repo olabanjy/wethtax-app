@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { IDENTIFICATION_TYPES } from "@/constant/profile";
+import { IDENTIFICATION_TYPES } from "@/constants/profile";
 import clsx from "clsx";
 import { Controller, useForm } from "react-hook-form";
 

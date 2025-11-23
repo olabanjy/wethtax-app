@@ -6,7 +6,7 @@ import {
 } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constant/states";
+import { STATES } from "@/constants/states";
 import {
   LucideChevronDown,
   LucideCircleAlert,

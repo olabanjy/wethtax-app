@@ -40,7 +40,7 @@ const IndividualProfile = () => {
   const { mutateAsync: verifyIdentity, isPending: verifying } = useSend<
     { id_type: "BVN" | "NIN"; id_number: string },
     any
-  >("/tenant/lagos/api/v1/ums/profile/verify-identity/", {
+  >("/ums/profile/verify-identity/", {
     method: "post",
     successMessage: "OTP sent to your email and phone number",
     hideToast: "success",
@@ -57,7 +57,7 @@ const IndividualProfile = () => {
   const { mutateAsync: confirmOtp, isPending: confirming } = useSend<
     { id_type: "BVN" | "NIN"; id_number: string; otp: string },
     any
-  >("/tenant/lagos/api/v1/ums/profile/verify-identity/confirm-otp/", {
+  >("/ums/profile/verify-identity/confirm-otp/", {
     method: "post",
     successMessage: "Identity verified",
     onSuccess: (data) => {
@@ -72,7 +72,7 @@ const IndividualProfile = () => {
   });
 
   const { mutateAsync: updateProfile, isPending } = useSend<any, any>(
-    "/tenant/lagos/api/v1/ums/profile/me/update/",
+    "/ums/profile/me/update/",
     {
       method: "patch",
       successMessage: "Profile updated",
@@ -89,7 +89,7 @@ const IndividualProfile = () => {
   const { mutateAsync: updateTaxPayerId, isPending: updatingTaxId } = useSend<
     { tax_payer_id: string },
     any
-  >("/tenant/lagos/api/v1/ums/profile/update/tax-payer-id/", {
+  >("/ums/profile/update/tax-payer-id/", {
     method: "patch",
     successMessage: "Tax ID Updated",
     onSuccess: () => {

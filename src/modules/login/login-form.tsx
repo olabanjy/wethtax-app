@@ -40,8 +40,9 @@ const LoginForm = () => {
   });
 
   const { mutateAsync, isPending } = useSend<LoginPayload, LoginResponse>(
-    "/tenant/lagos/login/",
+    "/login/",
     {
+      version: false,
       useAuth: false,
       successMessage: "Login successful",
       onSuccess: (data) => {

@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { AxiosError, type AxiosRequestConfig } from "axios";
 import { createApiClient } from "@/lib/api";
 import { toast } from "sonner";
+import { useStore } from "@/store";
 
 export interface ISendOptions<T, Variables> {
   params?: unknown;
@@ -15,6 +16,8 @@ export interface ISendOptions<T, Variables> {
   enabled?: boolean;
   onError?: (error: Error, variables: Variables) => void;
   method?: "post" | "put" | "patch" | "delete";
+  useTenant?: boolean;
+  version?: false | "v1" | "v2";
 }
 
 export const useSend = <Variables, T = unknown>(
@@ -31,19 +34,24 @@ export const useSend = <Variables, T = unknown>(
     onError,
     hideToast = "none",
     method = "post",
+    useTenant = true,
+    version = "v1",
   } = options;
+  const tenant = useStore((s) => s.tenantName);
   const { client } = createApiClient({ useAuth, baseUrl });
   const mutationFn = useCallback(
     async (variables: Variables) => {
       const { data } = await client[method](
-        url,
+        `${useTenant ? `/tenant/${tenant}` : ""}${
+          version ? `/api/${version}` : ""
+        }${url}`,
         variables as Variables & AxiosRequestConfig<Variables>,
         { params }
       );
 
       return data;
     },
-    [client, method, params, url]
+    [client, method, params, url, useTenant, version, tenant]
   );
   const mutation = useMutation({
     mutationFn,

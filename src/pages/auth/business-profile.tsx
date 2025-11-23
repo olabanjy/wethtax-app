@@ -48,7 +48,7 @@ const BusinessProfile = () => {
   const { mutateAsync: verifyIdentity, isPending: verifying } = useSend<
     { id_type: "CAC"; id_number: string },
     any
-  >("/tenant/lagos/api/v1/ums/profile/verify-identity/", {
+  >("/ums/profile/verify-identity/", {
     method: "post",
     successMessage: "OTP sent to your email and phone number",
     hideToast: "success",
@@ -65,7 +65,7 @@ const BusinessProfile = () => {
   const { mutateAsync: confirmOtp, isPending: confirming } = useSend<
     { id_type: "CAC"; id_number: string; otp: string },
     any
-  >("/tenant/lagos/api/v1/ums/profile/verify-identity/confirm-otp/", {
+  >("/ums/profile/verify-identity/confirm-otp/", {
     method: "post",
     successMessage: "Identity verified",
     onSuccess: (data) => {
@@ -80,7 +80,7 @@ const BusinessProfile = () => {
   });
 
   const { mutateAsync: updateCompany, isPending: updating } = useSend<any, any>(
-    "/tenant/lagos/api/v1/ums/profile/me/update-company/",
+    "/ums/profile/me/update-company/",
     {
       method: "patch",
       successMessage: "Company profile updated",
@@ -97,7 +97,7 @@ const BusinessProfile = () => {
   const { mutateAsync: updateTaxPayerId, isPending: updatingTaxId } = useSend<
     { tax_payer_id: string; tax_payer_id_type: string },
     any
-  >("/tenant/lagos/api/v1/ums/profile/update/tax-payer-id/", {
+  >("/ums/profile/update/tax-payer-id/", {
     method: "patch",
     successMessage: "Tax ID Updated",
     onSuccess: (_response, payload) => {
