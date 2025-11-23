@@ -21,7 +21,7 @@ const ForgotPassword = () => {
   const identify = useSend<
     { taxId: string },
     { message: string; token: string }
-  >("/tenant/lagos/api/v1/ums/profile/reset-password/", {
+  >("/ums/profile/reset-password/", {
     useAuth: false,
     onSuccess: (data, variables) => {
       setContext({ taxId: variables.taxId, token: data?.token });
@@ -32,7 +32,7 @@ const ForgotPassword = () => {
 
   // Step 2: verify code
   const verify = useSend<{ token?: string }, { message: string }>(
-    "/tenant/lagos/api/v1/ums/profile/verify_otp/",
+    "/ums/profile/verify_otp/",
     {
       useAuth: false,
       onSuccess: () => setStep(3),
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
   const reset = useSend<
     { password: string; confirmPassword: string; token?: string },
     { message: string }
-  >("/tenant/lagos/api/v1/ums/profile/reset-password/", {
+  >("/ums/profile/reset-password/", {
     useAuth: false,
     onSuccess: () => setStep(4),
     successMessage: "Password updated",

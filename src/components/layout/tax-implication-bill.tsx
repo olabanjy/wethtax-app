@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SubmitButtonGroup from "../ui/submit-button-group";
 import { Dialog, DialogContent } from "../ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 const TaxImplicationBill = ({
   title,
@@ -11,6 +12,7 @@ const TaxImplicationBill = ({
   values: Array<{ label: string; value: string }>;
   amount: string;
 }) => {
+  const navigate = useNavigate();
   const [openCheckModal, setopenCheckModal] = useState(false);
 
   return (
@@ -62,11 +64,12 @@ const TaxImplicationBill = ({
             firstButtonProps={{
               children: "Cancel",
               className: "w-1/2 max-w-full",
+              onClick: () => setopenCheckModal(false),
             }}
             secondButtonProps={{
               children: "Continue",
-              onClick: () => setopenCheckModal(false),
               className: "w-1/2 max-w-full",
+              onClick: () => navigate(`/individual/personal-income-tax/success`),
             }}
           />
         </DialogContent>

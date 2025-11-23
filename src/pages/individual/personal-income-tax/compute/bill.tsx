@@ -1,34 +1,47 @@
 import TaxImplicationBill from "@/components/layout/tax-implication-bill";
+import { useFetch } from "@/hooks/use-fetch";
+import { useSearchQuery } from "@/hooks/use-search-query";
+import { useStore } from "@/store";
+import type { IndividualReturn } from "@/types/returns";
+import dayjs from "dayjs";
+import useUser from "@/hooks/use-user-type";
 
 const PITBill = () => {
+  const { params } = useSearchQuery();
+  const id = params.get("id");
+  const tenant = useStore((s) => s.tenant);
+  const { user } = useUser();
+
+  const { data } = useFetch<IndividualReturn>(`/returns/individual/${id}/`);
+
   const values = [
     {
       label: "Biller",
-      value: "LIRS",
+      value: tenant.acronym,
     },
     {
       label: "Issue Date",
-      value: "11/11/2024",
+      value: dayjs(data?.created).format("DD/MM/YYYY"),
     },
     {
       label: "Tax Payer ID",
-      value: "473642",
+      value: user?.profile?.tax_payer_id,
     },
     {
-      label: "Tax Month in View",
-      value: "April",
+      label: "Tax Year in View",
+      value: data?.year_in_view,
     },
     {
       label: "Customer Name",
-      value: "John Doe",
+      value: data?.accommodation?.owner_name,
     },
     {
       label: "Phone Number",
-      value: "+234 123 456 7890",
+      value: user?.profile?.phone_number,
     },
     {
       label: "Customer Email Address",
-      value: "john.doe@example.com",
+      value: user?.profile?.email,
     },
   ];
 

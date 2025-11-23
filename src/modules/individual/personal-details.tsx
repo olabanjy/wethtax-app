@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constant/states";
+import { STATES } from "@/constants/states";
 import { Radio } from "@/components/ui/radio";
-import { getLgasForState, getLcdasFor } from "@/constant/locations";
+import { getLgasForState, getLcdasFor } from "@/constants/locations";
 import {
   TITLES,
   MARITAL_STATUSES,
   GENDERS,
   EMPLOYMENT_STATUSES,
   TAX_STATIONS,
-} from "@/constant/profile";
+} from "@/constants/profile";
 import { Controller, useForm } from "react-hook-form";
 import clsx from "clsx";
 

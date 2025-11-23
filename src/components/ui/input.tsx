@@ -6,10 +6,30 @@ type InputProps = React.ComponentProps<"input"> & {
   error?: string;
   labelClass?: string;
   label?: string;
+  isAmount?: boolean;
 };
 
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "decimal", // Default, but can be 'currency', 'percent', etc.
+  minimumFractionDigits: 2, // Ensures at least 2 decimal places
+  maximumFractionDigits: 2, // Ensures at most 2 decimal places
+});
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, labelClass, type, id, placeholder, error, label, ...props },
+  {
+    className,
+    labelClass,
+    type,
+    id,
+    placeholder,
+    error,
+    label,
+    onFocus,
+    onBlur,
+    onChange,
+    isAmount,
+    ...props
+  },
   ref
 ) {
   const [focused, setIsFocused] = React.useState(false);
@@ -18,6 +38,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   const inputId = id ?? generatedId;
 
   const isFocused = focused || Boolean(value);
+
+  const shouldFormatAmmount = isAmount && value && !focused && !isNaN(Number(value));
 
   const inputType = React.useMemo(() => {
     if (type === "date") {
@@ -29,9 +51,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <div>
-      {label && (
-        <p className="font-medium text-[#414141] mb-2">{label}</p>
-      )}
+      {label && <p className="font-medium text-[#414141] mb-2">{label}</p>}
       <fieldset
         className={cn("relative h-14 border-input rounded border", {
           "border-[#414141] h-[4.1rem] -mt-2.5": isFocused,
@@ -46,11 +66,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
           ref={ref}
           id={inputId}
           type={inputType}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={(e) => {
+            onFocus?.(e);
+            setIsFocused(true);
+          }}
+          onBlur={(e) => {
+            onBlur?.(e);
+            setIsFocused(false);
+          }}
           data-slot="input"
           placeholder=" "
           aria-invalid={!!error}
+          value={
+            shouldFormatAmmount ? formatter.format(Number(value)) : value
+          }
           className={cn(
             "peer file:text-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 h-full w-full min-w-0",
             " bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0",
@@ -59,11 +88,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
             type === "date" && "cursor-pointer",
             className
           )}
-          {...props}
           onChange={(e) => {
-            setValue(e.target.value);
-            props.onChange?.(e);
+            const v = e.target.value
+            const formatValue = isAmount ? v.replace(/,/g, '') : v
+            if (isAmount && isNaN(Number(formatValue))) return
+            setValue(formatValue);
+            onChange?.({ ...e, target: { ...e.target, value: formatValue } });
           }}
+          {...props}
         />
 
         <label

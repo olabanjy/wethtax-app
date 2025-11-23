@@ -1,19 +1,41 @@
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constant/states";
 import clsx from "clsx";
 import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useStore } from "@/store";
+import { useFetch } from "@/hooks/use-fetch";
+import { capitalize } from "@/lib/utils";
 
-const SelectState = ({ handleContinue }: { handleContinue: () => void }) => {
+const schema = z.object({
+  state: z.string().min(1, "State is required"),
+});
+
+const SelectState = () => {
+  const { setTenantName } = useStore();
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<{ state: string }>({
     defaultValues: { state: "" },
+    resolver: zodResolver(schema),
   });
 
-  const onSubmit = () => handleContinue();
+  const { data, isLoading } = useFetch<{ name: string }[]>("/tenants/all", {
+    useTenant: false,
+    version: false,
+    useAuth: false,
+    hideToast: "success",
+    errorMessage: "Failed to fetch tenants",
+  });
+
+  const onSubmit = (data: z.infer<typeof schema>) => {
+    const { protocol, host } = window.location;
+    setTenantName(data.state);
+    window.location.href = `${protocol}//${data.state}.${host}/login`;
+  };
 
   return (
     <div
@@ -51,7 +73,12 @@ const SelectState = ({ handleContinue }: { handleContinue: () => void }) => {
             rules={{ required: "Please select a state" }}
             render={({ field: { value, onChange } }) => (
               <Select
-                options={STATES}
+                options={
+                  data?.map((tenant) => ({
+                    value: tenant.name,
+                    label: capitalize(tenant.name),
+                  })) ?? []
+                }
                 placeholder="Select State"
                 value={value}
                 onChange={onChange}
@@ -62,7 +89,13 @@ const SelectState = ({ handleContinue }: { handleContinue: () => void }) => {
           />
         </div>
 
-        <Button className="w-full" size="xl" type="submit" disabled={!isValid}>
+        <Button
+          loading={isLoading}
+          className="w-full"
+          size="xl"
+          type="submit"
+          disabled={!isValid}
+        >
           Continue
         </Button>
       </form>
