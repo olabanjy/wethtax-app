@@ -11,6 +11,7 @@ const TenantCheck = () => {
     const hostWrapper: Record<string, string> = {
       "localhost:5174": "lagos.taxapp.ng",
       "localhost:5173": "lagos.taxapp.ng",
+      "https://wethtax-app.netlify.app": "lagos.taxapp.ng",
     };
 
     const originName = origin.replace("http://", "").replace("https://", "");
@@ -35,7 +36,8 @@ const TenantCheck = () => {
 
   if (shouldRedirect === null) return;
 
-  if (shouldRedirect) return <Navigate to="/get-started" state={{ pathname }} />;
+  if (shouldRedirect)
+    return <Navigate to="/get-started" state={{ pathname }} />;
 
   return <Outlet />;
 };
