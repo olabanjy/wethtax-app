@@ -126,7 +126,7 @@ const CompanyFileAnnualReturn = () => {
       };
       await submitAnnual(payload);
       form.reset({ filings: [defaultValues] });
-      navigate("/dashboard");
+      navigate("/company/annual-returns");
     }
   };
 
