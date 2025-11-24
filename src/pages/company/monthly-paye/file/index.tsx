@@ -8,6 +8,10 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { LucideCirclePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MultipleFilling from "@/modules/dashboard/tax-filing/multiple";
+import { useSearchQuery } from "@/hooks/use-search-query";
+import { useSend } from "@/hooks/use-send";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const defaultValues = {
   tin: "",
@@ -26,6 +30,12 @@ const defaultValues = {
 };
 
 const CompanyFileMonthly = () => {
+  const navigate = useNavigate();
+  const { params } = useSearchQuery();
+
+  const monthParam = (params.get("month") || "").toString();
+  const yearParam = Number(params.get("year") || new Date().getFullYear());
+
   const [employeeType, setEmployeeType] = useState<"single" | "multiple" | "">(
     ""
   );
@@ -40,6 +50,65 @@ const CompanyFileMonthly = () => {
     control,
     name: "filings",
   });
+
+  const { mutateAsync: submitMonthlyPaye, isPending } = useSend<any, any>(
+    "/returns/company/monthly-returns/monthly-payee/",
+    {
+      method: "post",
+      successMessage: "Monthly PAYE submitted",
+      onSuccess: () => {
+        navigate("/company/monthly-paye");
+      },
+    }
+  );
+
+  const { mutateAsync: uploadMonthlyPayeFile, isPending: isUploading } = useSend<
+    FormData,
+    any
+  >(
+    "/returns/company/monthly-returns/monthly-payee/upload/",
+    {
+      method: "post",
+      successMessage: "File uploaded successfully",
+      onSuccess: () => {
+        navigate("/company/monthly-paye");
+      },
+    }
+  );
+
+  const onSubmit = async (values: FilingFormValues) => {
+    const monthly_payees = values.filings.map((f) => ({
+      staff_tax_payer_id: f.tin || "",
+      basic: f.basic || "",
+      transport: f.transport || "",
+      housing: f.housing || "",
+      others: f.others || "",
+      bonus: f.bonus || "",
+      npf: f.nps || "",
+      nhf: f.nhs || "",
+      state_of_residence: Number(f.state) || 0,
+    }));
+
+    const payload = {
+      year: yearParam,
+      month: monthParam.toUpperCase(),
+      monthly_payees,
+    };
+
+    await submitMonthlyPaye(payload);
+  };
+
+  const onUpload = async () => {
+    if (!uploadedFile) {
+      toast.error("Please select a CSV or XLSX file to upload");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("year", String(yearParam));
+    formData.append("month", monthParam.toUpperCase());
+    formData.append("file", uploadedFile);
+    await uploadMonthlyPayeFile(formData);
+  };
 
   return (
     <div className="w-full space-y-10">
@@ -96,12 +165,28 @@ const CompanyFileMonthly = () => {
               variant="outline"
               size="xl"
               className="w-[225px] border-black"
+              type="button"
+              onClick={() => navigate("/company/monthly-paye")}
             >
               Cancel
             </Button>
 
-            <Button size="xl" className="w-[225px]">
-              Next
+            <Button
+              size="xl"
+              className="w-[225px]"
+              type="button"
+              disabled={
+                isPending ||
+                isUploading ||
+                (employeeType === "multiple" && !uploadedFile)
+              }
+              onClick={
+                employeeType === "multiple"
+                  ? onUpload
+                  : form.handleSubmit(onSubmit)
+              }
+            >
+              Proceed
             </Button>
           </div>
         )}

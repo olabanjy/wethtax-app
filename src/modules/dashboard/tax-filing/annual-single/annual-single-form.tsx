@@ -5,15 +5,9 @@ import {
   type UseFormRegister,
 } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Select, type SelectOption } from "@/components/ui/select";
 import { LucideChevronDown, LucideTrash } from "lucide-react";
 import clsx from "clsx";
-
-const NATIONALITIES = [
-  { label: "Nigerian", value: "nigeria" },
-  { label: "Ghanaian", value: "ghana" },
-  { label: "Other", value: "other" },
-];
 
 export type AnnualFiling = {
   lastName: string;
@@ -43,12 +37,14 @@ export default function AnnualSingleForm({
   register,
   canDelete,
   onDelete,
+  nationalities,
 }: {
   index: number;
   control: Control<AnnualFilingFormValues>;
   register: UseFormRegister<AnnualFilingFormValues>;
   canDelete?: boolean;
   onDelete?: () => void;
+  nationalities: SelectOption[];
 }) {
   const [open, setOpen] = useState(true);
 
@@ -122,7 +118,7 @@ export default function AnnualSingleForm({
           render={({ field }) => (
             <Select
               title="Nationality"
-              options={NATIONALITIES}
+              options={nationalities}
               placeholder="Select Nationality"
               value={field.value}
               onChange={field.onChange}

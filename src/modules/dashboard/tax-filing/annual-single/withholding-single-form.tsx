@@ -9,18 +9,38 @@ import clsx from "clsx";
 import { DatePicker } from "@/components/ui/date-picker";
 
 const WITHHOLDING_TYPES = [
-  { label: "Contractor/Supplier", value: "contractor" },
-  { label: "Rent", value: "rent" },
-  { label: "Interest", value: "interest" },
-  { label: "Dividend", value: "dividend" },
-  { label: "Other", value: "other" },
+  { label: "BANK INTEREST", value: "BANK INTEREST" },
+  { label: "BUILDING CONSTRUCTION BRIDGES", value: "BUILDING CONSTRUCTION BRIDGES" },
+  { label: "COMMISSION", value: "COMMISSION" },
+  { label: "CONSULTANCY", value: "CONSULTANCY" },
+  { label: "CONTRACT", value: "CONTRACT" },
+  { label: "DIRECTORS_FEES", value: "DIRECTORS_FEES" },
+  { label: "DIVIDEND", value: "DIVIDEND" },
+  { label: "RENT", value: "RENT" },
+  { label: "ROYALTY", value: "ROYALTY" },
+  { label: "TECHNICAL SERVICES", value: "TECHNICAL SERVICES" },
 ];
+
+const MONTH_OPTIONS = [
+  "JANUARY",
+  "FEBRUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+].map((m) => ({ label: m, value: m }));
 
 export type WithholdingFiling = {
   dateOfPayment: string;
   amountPaid: string;
-  periodOfPayment: string;
-  receiptNumber: string;
+  startPeriod: string;
+  endPeriod: string;
   withholdingType: string;
 };
 
@@ -62,22 +82,18 @@ export default function WithholdingSingleForm({
 
         <Controller
           control={control}
-          name={`filings.${index}.periodOfPayment`}
+          name={`filings.${index}.startPeriod`}
           render={({ field }) => (
-            <DatePicker
-              title="Period of Payment"
-              placeholder="Select period"
-              value={field.value}
-              onChange={field.onChange}
-            />
+            <Select title="Start Period (Month)" options={MONTH_OPTIONS} value={field.value} onChange={field.onChange} placeholder="Select month" />
           )}
         />
 
-        <Input
-          label="Receipt Number"
-          placeholder="Enter Receipt Number"
-          {...register(`filings.${index}.receiptNumber`)}
-          labelClass="!bg-[#f5f5f5]"
+        <Controller
+          control={control}
+          name={`filings.${index}.endPeriod`}
+          render={({ field }) => (
+            <Select title="End Period (Month)" options={MONTH_OPTIONS} value={field.value} onChange={field.onChange} placeholder="Select month" />
+          )}
         />
 
         <Controller

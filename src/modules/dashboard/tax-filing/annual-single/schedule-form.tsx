@@ -6,6 +6,7 @@ import {
 import { Input } from "@/components/ui/input";
 import clsx from "clsx";
 import { DatePicker } from "@/components/ui/date-picker";
+import { Select } from "@/components/ui/select";
 
 type Section = {
   revenueItem: string;
@@ -23,6 +24,21 @@ export type ScheduleFiling = {
 export type ScheduleFilingFormValues = {
   filings: ScheduleFiling[];
 };
+
+const MONTH_OPTIONS = [
+  "JANUARY",
+  "FEBRUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+].map((m) => ({ label: m, value: m }));
 
 export default function ScheduleForm({
   index,
@@ -76,11 +92,12 @@ export default function ScheduleForm({
               control={control}
               name={`filings.${index}.development.periodOfPayment`}
               render={({ field }) => (
-                <DatePicker
+                <Select
                   title="Period of Payment"
-                  placeholder="Select period"
+                  placeholder="Select Month"
                   value={field.value}
                   onChange={field.onChange}
+                  options={MONTH_OPTIONS}
                 />
               )}
             />
@@ -127,11 +144,12 @@ export default function ScheduleForm({
               control={control}
               name={`filings.${index}.businessPremises.periodOfPayment`}
               render={({ field }) => (
-                <DatePicker
+                <Select
                   title="Period of Payment"
-                  placeholder="Select period"
+                  placeholder="Select Month"
                   value={field.value}
                   onChange={field.onChange}
+                  options={MONTH_OPTIONS}
                 />
               )}
             />
