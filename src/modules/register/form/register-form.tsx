@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password";
 import { Select } from "@/components/ui/select";
-import { TAXPAYERS } from "@/constant/taxpayers";
+import { TAXPAYERS } from "@/constants/taxpayers";
 import { useForm, Controller } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useSend } from "@/hooks/use-send";
@@ -60,8 +60,9 @@ export function RegisterForm() {
   };
 
   const { mutateAsync, isPending } = useSend<RegisterPayload, RegisterResponse>(
-    "/tenant/lagos/register/",
+    "/register/",
     {
+      version: false,
       useAuth: false,
       successMessage: "Registration successful",
       onSuccess: (data) => {

@@ -77,7 +77,8 @@ export function Select({
             "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] cursor-pointer",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
             size,
-            ariaInvalid && "border-destructive ring-destructive/20"
+            ariaInvalid && "border-destructive ring-destructive/20",
+            { "border-[#414141]": !!value || open }
           )}
         >
           <span className={cn(!selected && "text-muted-foreground")}>
