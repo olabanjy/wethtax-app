@@ -15,13 +15,13 @@ const AnnualReturn = () => {
 
   const endpointByTab: Record<string, string> = {
     annual:
-      "/tenant/lagos/api/v1/returns/company/annual-returns/annual-returns/",
+      "/returns/company/annual-returns/annual-returns/",
     projection:
-      "/tenant/lagos/api/v1/returns/company/annual-returns/projection-returns/",
+      "/returns/company/annual-returns/projection-returns/",
     withholding:
-      "/tenant/lagos/api/v1/returns/company/annual-returns/witholding-tax/",
+      "/returns/company/annual-returns/witholding-tax/",
     schedule:
-      "/tenant/lagos/api/v1/returns/company/annual-returns/schedule-returns/",
+      "/returns/company/annual-returns/schedule-returns/",
   };
 
   const normalizeRows = (resp: unknown): AnnualReturnRow[] => {

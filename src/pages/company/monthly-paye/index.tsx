@@ -19,7 +19,7 @@ const MonthlyPAYE = () => {
 
   const { data: apiData, isLoading } = useFetch<{
     results?: Array<Record<string, unknown>>;
-  }>("/tenant/lagos/api/v1/returns/company/monthly-returns/", {
+  }>("/returns/company/monthly-returns/", {
     params: { year },
     hideToast: "success",
     retry: 1,

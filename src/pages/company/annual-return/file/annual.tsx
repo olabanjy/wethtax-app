@@ -52,7 +52,7 @@ const CompanyFileAnnualReturn = () => {
   const navigate = useNavigate();
 
   const { data: nationalityOptions = [] } = useFetch<SelectOption[]>(
-    "/tenant/lagos/api/v1/location/countries/",
+    "/location/countries/",
     {
       select: (resp: unknown) => {
         const arr = Array.isArray(resp) ? resp : [];
@@ -72,7 +72,7 @@ const CompanyFileAnnualReturn = () => {
       annual_returns: unknown[];
     },
     { message?: string }
-  >("/tenant/lagos/api/v1/returns/company/annual-returns/annual-returns/", {
+  >("/returns/company/annual-returns/annual-returns/", {
     method: "post",
     hideToast: "none",
     successMessage: "Annual returns submitted successfully",
@@ -83,7 +83,7 @@ const CompanyFileAnnualReturn = () => {
     FormData,
     { message?: string }
   >(
-    "/tenant/lagos/api/v1/returns/company/annual-returns/annual-returns/upload/",
+    "/returns/company/annual-returns/annual-returns/upload/",
     {
       method: "post",
       hideToast: "none",
@@ -184,7 +184,7 @@ const CompanyFileAnnualReturn = () => {
             <MultipleFilling
               uploadedFile={uploadedFile}
               setUploadedFile={setUploadedFile}
-              templateEndpoint="/tenant/lagos/api/v1/returns/company/annual-returns/annual-returns/template/"
+              templateEndpoint="/returns/company/annual-returns/annual-returns/template/"
               templateParams={{ year }}
               accept=".csv"
             />

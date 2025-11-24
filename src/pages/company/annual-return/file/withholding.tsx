@@ -42,7 +42,7 @@ const CompanyFileWithholding = () => {
       type_of_witholding: string;
     },
     { message?: string }
-  >("/tenant/lagos/api/v1/returns/company/annual-returns/witholding-tax/", {
+  >("/returns/company/annual-returns/witholding-tax/", {
     method: "post",
     hideToast: "none",
     successMessage: "Withholding tax submitted successfully",

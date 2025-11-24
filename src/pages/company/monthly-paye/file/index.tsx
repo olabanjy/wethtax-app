@@ -52,7 +52,7 @@ const CompanyFileMonthly = () => {
   });
 
   const { mutateAsync: submitMonthlyPaye, isPending } = useSend<any, any>(
-    "/tenant/lagos/api/v1/returns/company/monthly-returns/monthly-payee/",
+    "/returns/company/monthly-returns/monthly-payee/",
     {
       method: "post",
       successMessage: "Monthly PAYE submitted",
@@ -66,7 +66,7 @@ const CompanyFileMonthly = () => {
     FormData,
     any
   >(
-    "/tenant/lagos/api/v1/returns/company/monthly-returns/monthly-payee/upload/",
+    "/returns/company/monthly-returns/monthly-payee/upload/",
     {
       method: "post",
       successMessage: "File uploaded successfully",

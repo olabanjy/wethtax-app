@@ -22,7 +22,7 @@ const MultipleFilling = ({
 
   const endpoint =
     templateEndpoint ??
-    "/tenant/lagos/api/v1/returns/company/monthly-returns/monthly-payee/template/";
+    "/returns/company/monthly-returns/monthly-payee/template/";
 
   const computedParams =
     templateParams ??

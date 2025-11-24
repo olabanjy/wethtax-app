@@ -48,7 +48,7 @@ const CompanyFileProjection = () => {
   const navigate = useNavigate();
 
   const { data: nationalityOptions = [] } = useFetch<SelectOption[]>(
-    "/tenant/lagos/api/v1/location/countries/",
+    "/location/countries/",
     {
       select: (resp: unknown) => {
         const arr = Array.isArray(resp) ? resp : [];
@@ -68,7 +68,7 @@ const CompanyFileProjection = () => {
       projection_returns: unknown[];
     },
     { message?: string }
-  >("/tenant/lagos/api/v1/returns/company/annual-returns/projection-returns/", {
+  >("/returns/company/annual-returns/projection-returns/", {
     method: "post",
     hideToast: "none",
     successMessage: "Projection returns submitted successfully",
@@ -79,7 +79,7 @@ const CompanyFileProjection = () => {
     FormData,
     { message?: string }
   >(
-    "/tenant/lagos/api/v1/returns/company/annual-returns/projection-returns/upload/",
+    "/returns/company/annual-returns/projection-returns/upload/",
     {
       method: "post",
       hideToast: "none",
@@ -175,7 +175,7 @@ const CompanyFileProjection = () => {
             <MultipleFilling
               uploadedFile={uploadedFile}
               setUploadedFile={setUploadedFile}
-              templateEndpoint="/tenant/lagos/api/v1/returns/company/annual-returns/projection-returns/template/"
+              templateEndpoint="/returns/company/annual-returns/projection-returns/template/"
               templateParams={{ year }}
               accept=".csv"
             />

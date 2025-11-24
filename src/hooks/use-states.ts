@@ -11,7 +11,7 @@ type StateItem = {
 
 export const useStates = () => {
   const { data, isLoading, isError } = useFetch<StateItem[]>(
-    "/tenant/lagos/api/v1/location/countries/nigeria/states/",
+    "/location/countries/nigeria/states/",
     {
       hideToast: "all",
       retry: 1,

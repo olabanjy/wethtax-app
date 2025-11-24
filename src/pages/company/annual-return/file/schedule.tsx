@@ -57,7 +57,7 @@ const CompanyFileSchedule = () => {
       business_premises_end_period_of_payment: string;
     },
     { message?: string }
-  >("/tenant/lagos/api/v1/returns/company/annual-returns/schedule-returns/", {
+  >("/returns/company/annual-returns/schedule-returns/", {
     method: "post",
     hideToast: "none",
     successMessage: "Schedule returns submitted successfully",
