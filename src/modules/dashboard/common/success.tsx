@@ -1,5 +1,5 @@
+import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
-import { Button } from "../ui/button";
 
 const DashboardSuccess = ({
   title,

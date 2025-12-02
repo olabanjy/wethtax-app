@@ -9,9 +9,9 @@ const TenantCheck = () => {
 
   useEffect(() => {
     const hostWrapper: Record<string, string> = {
-      "localhost:5174": "lagos.taxapp.ng",
-      "localhost:5173": "lagos.taxapp.ng",
-      "https://wethtax-app.netlify.app": "lagos.taxapp.ng",
+      "localhost:5174": "lagos.wethtax.com",
+      "localhost:5173": "lagos.wethtax.com",
+      "wethtax-app.netlify.app": "lagos.wethtax.com",
     };
 
     const originName = origin.replace("http://", "").replace("https://", "");
