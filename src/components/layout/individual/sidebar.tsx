@@ -1,9 +1,5 @@
 import { Files } from "lucide-react";
-import {
-  MdHomeFilled,
-  MdOutlineFilePresent,
-  MdSupportAgent,
-} from "react-icons/md";
+import { MdHomeFilled, MdSupportAgent } from "react-icons/md";
 import type { SideLinkProps } from "../side-link";
 
 export const individualSideLinks: SideLinkProps[] = [
@@ -31,19 +27,7 @@ export const individualSideLinks: SideLinkProps[] = [
     ],
   },
   {
-    icon: <MdOutlineFilePresent size={24} />,
-    title: "Filing History",
-    subLinks: [],
-  },
-  {
     icon: <MdSupportAgent size={24} />,
     title: "Help & Support",
-    subLinks: [
-      {
-        icon: <MdSupportAgent size={16} />,
-        title: "Help & Support",
-        href: "/",
-      },
-    ],
   },
 ];

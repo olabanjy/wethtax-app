@@ -32,13 +32,7 @@ const Sidebar = ({ links }: { links: SideLinkProps[] }) => {
           </div>
 
           <div className="w-full pl-1.5">
-            <SideLink
-              icon={<Settings size={24} />}
-              title="Settings"
-              subLinks={[
-                { icon: <Settings size={16} />, title: "Settings", href: "/" },
-              ]}
-            />
+            <SideLink icon={<Settings size={24} />} title="Settings" />
           </div>
         </div>
       </div>
