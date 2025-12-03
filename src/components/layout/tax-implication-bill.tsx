@@ -7,10 +7,12 @@ const TaxImplicationBill = ({
   title,
   values,
   amount,
+  proceedLink = "/individual/personal-income-tax/success",
 }: {
   title: string;
   values: Array<{ label: string; value: string }>;
   amount: string;
+  proceedLink?: string;
 }) => {
   const navigate = useNavigate();
   const [openCheckModal, setopenCheckModal] = useState(false);
@@ -48,7 +50,7 @@ const TaxImplicationBill = ({
       <CrosscheckDialog
         open={openCheckModal}
         toggle={() => setopenCheckModal(!openCheckModal)}
-        onProceed={() => navigate(`/individual/personal-income-tax/success`)}
+        onProceed={() => navigate(proceedLink)}
       />
     </section>
   );

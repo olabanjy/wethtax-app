@@ -9,7 +9,7 @@ import ForgotPassword from "@/pages/auth/forgot-password";
 import Layout from "@/components/layout/layout";
 import PersonalIncomeTax from "@/pages/individual/personal-income-tax";
 import ComputePIT from "@/pages/individual/personal-income-tax/compute";
-import ComputePITlayout from "@/components/layout/individual/compute-pit";
+import InPageLayout from "@/components/layout/in-page";
 
 // company routes
 import Company from "@/pages/company";
@@ -26,6 +26,10 @@ import PITBill from "@/pages/individual/personal-income-tax/compute/bill";
 import PITSuccess from "@/pages/individual/personal-income-tax/success";
 import TenantCheck from "@/components/layout/tenant-check";
 import GetStarted from "@/pages/auth/get-started";
+import IndividualDevelopmentLevy from "@/pages/individual/development-levy";
+import ComputeDevelopmentLevy from "@/pages/individual/development-levy/compute";
+import DevelopmentLevyBill from "@/pages/individual/development-levy/compute/bill";
+import DevelopmentLevySuccess from "@/pages/individual/development-levy/success";
 
 const AppRouter = () => {
   return (
@@ -68,13 +72,27 @@ const AppRouter = () => {
         <Route path="individual" element={<Layout />}>
           <Route path="personal-income-tax" element={<Outlet />}>
             <Route index element={<PersonalIncomeTax />} />
-            <Route path="compute" element={<ComputePITlayout />}>
+            <Route
+              path="compute"
+              element={<InPageLayout title="Personal Income Tax" />}
+            >
               <Route index element={<ComputePIT />} />
               <Route path="accommodation" element={<AccommodationPIT />} />
               <Route path="income" element={<IncomePIT />} />
               <Route path="bill" element={<PITBill />} />
             </Route>
             <Route path="success" element={<PITSuccess />} />
+          </Route>
+          <Route path="development-levy" element={<Outlet />}>
+            <Route index element={<IndividualDevelopmentLevy />} />
+            <Route path="success" element={<DevelopmentLevySuccess />} />
+            <Route
+              path="compute"
+              element={<InPageLayout title="Development Levy" />}
+            >
+              <Route index element={<ComputeDevelopmentLevy />} />
+              <Route path="bill" element={<DevelopmentLevyBill />} />
+            </Route>
           </Route>
         </Route>
 

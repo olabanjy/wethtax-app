@@ -66,10 +66,11 @@ export const useSend = <Variables, T = unknown>(
         message: string;
         error: string;
         statusCode: number;
+        detail?: string;
         errors: Record<string, string[]>;
       }>;
       const axiosErrors = error?.response?.data?.errors ?? {};
-      const axiosError = error?.response?.data?.message;
+      const axiosError = error?.response?.data?.message ?? error?.response?.data?.detail;
       const axiosErrorMessage =
         errorMessage ??
         axiosError ??
