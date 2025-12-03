@@ -34,6 +34,10 @@ import CompanyDevelopmentLevy from "@/pages/company/development-levy";
 import CompanyDevelopmentLevySuccess from "@/pages/company/development-levy/success";
 import ComputeCompanyDevelopmentLevy from "@/pages/company/development-levy/compute";
 import CompanyDevelopmentLevyBill from "@/pages/company/development-levy/compute/bill";
+import BusinessPremisesLevy from "@/pages/company/business-premises-levy";
+import BusinessPremisesLevySuccess from "@/pages/company/business-premises-levy/success";
+import ComputeBusinessPremisesLevy from "@/pages/company/business-premises-levy/compute";
+import BusinessPremisesLevyBill from "@/pages/company/business-premises-levy/compute/bill";
 
 const AppRouter = () => {
   return (
@@ -80,6 +84,17 @@ const AppRouter = () => {
             >
               <Route index element={<ComputeCompanyDevelopmentLevy />} />
               <Route path="bill" element={<CompanyDevelopmentLevyBill />} />
+            </Route>
+          </Route>
+          <Route path="business-premises-levy" element={<Outlet />}>
+            <Route index element={<BusinessPremisesLevy />} />
+            <Route path="success" element={<BusinessPremisesLevySuccess />} />
+            <Route
+              path="compute"
+              element={<InPageLayout title="Business Premises Levy" />}
+            >
+              <Route index element={<ComputeBusinessPremisesLevy />} />
+              <Route path="bill" element={<BusinessPremisesLevyBill />} />
             </Route>
           </Route>
         </Route>

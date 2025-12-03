@@ -9,11 +9,11 @@ import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
 
 const schema = z.object({
-  staffCount: z.string().min(1, "Number of Staff is required"),
+  companyRegNumber: z.string().min(1, "Number of Staff is required"),
   amount: z.string().min(1, "Levy Amount is required"),
 });
 
-const ComputeCompanyDevelopmentLevy = () => {
+const ComputeBusinessPremisesLevy = () => {
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const ComputeCompanyDevelopmentLevy = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      staffCount: "",
+      companyRegNumber: "",
       amount: "",
     },
     resolver: zodResolver(schema),
@@ -38,15 +38,14 @@ const ComputeCompanyDevelopmentLevy = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="staffCount">Number of Staff</Label>
+          <Label htmlFor="companyRegNumber">Company Registration Number</Label>
           <Input
-            isAmount
-            placeholder="Enter Number of Staff"
-            value={watch("staffCount")}
+            placeholder="Enter Company Registration Number"
+            value={watch("companyRegNumber")}
             onChange={(e) => {
-              setValue("staffCount", e.target.value);
+              setValue("companyRegNumber", e.target.value);
             }}
-            error={errors.staffCount?.message as string}
+            error={errors.companyRegNumber?.message as string}
           />
         </div>
         <div>
@@ -71,7 +70,10 @@ const ComputeCompanyDevelopmentLevy = () => {
         >
           Cancel
         </Button>
-        <Button type="submit" className="w-full max-w-[14rem] h-12">
+        <Button
+          type="submit"
+          className="w-full max-w-[14rem] h-12"
+        >
           Proceed
         </Button>
       </div>
@@ -79,10 +81,12 @@ const ComputeCompanyDevelopmentLevy = () => {
         open={processing}
         toggle={() => setProcessing(!processing)}
         calculating={false}
-        onProceed={() => navigate(`/company/development-levy/compute/bill`)}
+        onProceed={() =>
+          navigate(`/company/business-premises-levy/compute/bill`)
+        }
       />
     </form>
   );
 };
 
-export default ComputeCompanyDevelopmentLevy;
+export default ComputeBusinessPremisesLevy;

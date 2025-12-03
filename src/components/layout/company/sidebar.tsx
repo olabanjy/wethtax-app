@@ -28,6 +28,10 @@ export const companySideLinks: SideLinkProps[] = [
         title: "Development Levy",
         href: "/company/development-levy",
       },
+      {
+        title: "Business Premises Levy",
+        href: "/company/business-premises-levy",
+      },
     ],
   },
   {
