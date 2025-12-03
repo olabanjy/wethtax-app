@@ -38,6 +38,10 @@ import BusinessPremisesLevy from "@/pages/company/business-premises-levy";
 import BusinessPremisesLevySuccess from "@/pages/company/business-premises-levy/success";
 import ComputeBusinessPremisesLevy from "@/pages/company/business-premises-levy/compute";
 import BusinessPremisesLevyBill from "@/pages/company/business-premises-levy/compute/bill";
+import CapitalGainsTax from "@/pages/company/capital-gains-tax";
+import CapitalGainsTaxSuccess from "@/pages/company/capital-gains-tax/success";
+import ComputeCapitalGainsTax from "@/pages/company/capital-gains-tax/compute";
+import CapitalGainsTaxBill from "@/pages/company/capital-gains-tax/compute/bill";
 
 const AppRouter = () => {
   return (
@@ -95,6 +99,17 @@ const AppRouter = () => {
             >
               <Route index element={<ComputeBusinessPremisesLevy />} />
               <Route path="bill" element={<BusinessPremisesLevyBill />} />
+            </Route>
+          </Route>
+          <Route path="capital-gains-tax" element={<Outlet />}>
+            <Route index element={<CapitalGainsTax />} />
+            <Route path="success" element={<CapitalGainsTaxSuccess />} />
+            <Route
+              path="compute"
+              element={<InPageLayout title="Capital Gain Tax" />}
+            >
+              <Route index element={<ComputeCapitalGainsTax />} />
+              <Route path="bill" element={<CapitalGainsTaxBill />} />
             </Route>
           </Route>
         </Route>

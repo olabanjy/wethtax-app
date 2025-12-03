@@ -32,6 +32,10 @@ export const companySideLinks: SideLinkProps[] = [
         title: "Business Premises Levy",
         href: "/company/business-premises-levy",
       },
+      {
+        title: "Capital Gains Tax",
+        href: "/company/capital-gains-tax",
+      },
     ],
   },
   {

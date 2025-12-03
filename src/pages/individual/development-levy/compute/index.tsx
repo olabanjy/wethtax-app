@@ -65,6 +65,9 @@ const ComputeIndividualDevelopmentLevy = () => {
             value={watch("year")}
             placeholder="Select Year"
             error={errors.year?.message}
+            onChange={(e) => {
+              setValue("year", e);
+            }}
           />
         </div>
         <div>
