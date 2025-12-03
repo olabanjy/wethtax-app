@@ -72,7 +72,7 @@ const PersonalIncomeTax = () => {
     []
   );
 
-  const { data: returns } = useFetch<IndividualReturnsList>(
+  const { data: returns, isLoading } = useFetch<IndividualReturnsList>(
     "/returns/individual/",
     {
       hideToast: "success",
@@ -96,7 +96,12 @@ const PersonalIncomeTax = () => {
     <div className="w-full space-y-10">
       <h1 className="text-xl font-[600] text-[#121212]">Personal Income Tax</h1>
 
-      <DataTable pagination={false} columns={columns} data={data} />
+      <DataTable
+        pagination={false}
+        columns={columns}
+        data={data}
+        tableProps={{ progressPending: isLoading }}
+      />
     </div>
   );
 };

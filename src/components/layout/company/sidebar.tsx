@@ -24,6 +24,10 @@ export const companySideLinks: SideLinkProps[] = [
         title: "Annual Returns",
         href: "/company/annual-returns",
       },
+      {
+        title: "Development Levy",
+        href: "/company/development-levy",
+      },
     ],
   },
   {

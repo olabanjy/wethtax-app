@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { YEARS } from "@/constants/common";
-import { useSearchQuery } from "@/hooks/use-search-query";
-import useUser from "@/hooks/use-user-type";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -13,17 +9,13 @@ import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
 
 const schema = z.object({
-  year: z.string().min(1, "Year is required"),
-  payerId: z.string().min(1, "Tax Payer ID is required"),
+  staffCount: z.string().min(1, "Number of Staff is required"),
   amount: z.string().min(1, "Levy Amount is required"),
 });
 
-const ComputeIndividualDevelopmentLevy = () => {
+const ComputeCompanyDevelopmentLevy = () => {
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
-  const { user } = useUser();
-  const { params } = useSearchQuery();
-  const year = params.get("year");
 
   const {
     handleSubmit,
@@ -32,8 +24,7 @@ const ComputeIndividualDevelopmentLevy = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      payerId: user?.profile?.tax_payer_id || "test",
-      year: year || "",
+      staffCount: "",
       amount: "",
     },
     resolver: zodResolver(schema),
@@ -45,26 +36,16 @@ const ComputeIndividualDevelopmentLevy = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="payerId">Your Tax Payer ID</Label>
+          <Label htmlFor="staffCount">Number of Staff</Label>
           <Input
             placeholder="Enter Number"
-            value={watch("payerId")}
-            disabled
-            error={errors.payerId?.message as string}
-          />
-        </div>
-        <div>
-          <Label htmlFor="year">Year in View</Label>
-          <Select
-            options={YEARS.map((y) => ({
-              value: y.toString(),
-              label: y.toString(),
-            }))}
-            value={watch("year")}
-            placeholder="Select Year"
-            error={errors.year?.message}
+            value={watch("staffCount")}
+            onChange={(e) => {
+              setValue("staffCount", e.target.value);
+            }}
+            error={errors.staffCount?.message as string}
           />
         </div>
         <div>
@@ -101,11 +82,11 @@ const ComputeIndividualDevelopmentLevy = () => {
         toggle={() => setProcessing(!processing)}
         calculating={false}
         onProceed={() =>
-          navigate(`/individual/development-levy/compute/bill`)
+          navigate(`/company/development-levy/compute/bill`)
         }
       />
     </form>
   );
 };
 
-export default ComputeIndividualDevelopmentLevy;
+export default ComputeCompanyDevelopmentLevy;

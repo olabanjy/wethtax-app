@@ -27,9 +27,13 @@ import PITSuccess from "@/pages/individual/personal-income-tax/success";
 import TenantCheck from "@/components/layout/tenant-check";
 import GetStarted from "@/pages/auth/get-started";
 import IndividualDevelopmentLevy from "@/pages/individual/development-levy";
-import ComputeDevelopmentLevy from "@/pages/individual/development-levy/compute";
-import DevelopmentLevyBill from "@/pages/individual/development-levy/compute/bill";
-import DevelopmentLevySuccess from "@/pages/individual/development-levy/success";
+import ComputeIndividualDevelopmentLevy from "@/pages/individual/development-levy/compute";
+import IndividualDevelopmentLevyBill from "@/pages/individual/development-levy/compute/bill";
+import IndividualDevelopmentLevySuccess from "@/pages/individual/development-levy/success";
+import CompanyDevelopmentLevy from "@/pages/company/development-levy";
+import CompanyDevelopmentLevySuccess from "@/pages/company/development-levy/success";
+import ComputeCompanyDevelopmentLevy from "@/pages/company/development-levy/compute";
+import CompanyDevelopmentLevyBill from "@/pages/company/development-levy/compute/bill";
 
 const AppRouter = () => {
   return (
@@ -67,6 +71,17 @@ const AppRouter = () => {
             path="annual-returns/file/schedule"
             element={<CompanyFileSchedule />}
           />
+          <Route path="development-levy" element={<Outlet />}>
+            <Route index element={<CompanyDevelopmentLevy />} />
+            <Route path="success" element={<CompanyDevelopmentLevySuccess />} />
+            <Route
+              path="compute"
+              element={<InPageLayout title="Development Levy" />}
+            >
+              <Route index element={<ComputeCompanyDevelopmentLevy />} />
+              <Route path="bill" element={<CompanyDevelopmentLevyBill />} />
+            </Route>
+          </Route>
         </Route>
 
         <Route path="individual" element={<Layout />}>
@@ -85,13 +100,16 @@ const AppRouter = () => {
           </Route>
           <Route path="development-levy" element={<Outlet />}>
             <Route index element={<IndividualDevelopmentLevy />} />
-            <Route path="success" element={<DevelopmentLevySuccess />} />
+            <Route
+              path="success"
+              element={<IndividualDevelopmentLevySuccess />}
+            />
             <Route
               path="compute"
               element={<InPageLayout title="Development Levy" />}
             >
-              <Route index element={<ComputeDevelopmentLevy />} />
-              <Route path="bill" element={<DevelopmentLevyBill />} />
+              <Route index element={<ComputeIndividualDevelopmentLevy />} />
+              <Route path="bill" element={<IndividualDevelopmentLevyBill />} />
             </Route>
           </Route>
         </Route>

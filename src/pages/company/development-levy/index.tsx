@@ -3,7 +3,7 @@ import { previousYear } from "@/constants/common";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-type IndividualDevelopmentLevyRow = {
+type CompanyDevelopmentLevyRow = {
   year: number;
   status: string;
   actionHref: string;
@@ -13,7 +13,7 @@ type IndividualDevelopmentLevyRow = {
 const getTableAction = (year: number, returnExists?: { id: string }) => {
   if (!returnExists) {
     return {
-      actionHref: `/individual/development-levy/compute?year=${year}`,
+      actionHref: `/company/development-levy/compute?year=${year}`,
       label: "Click to file return",
       status: "Not Filled",
     };
@@ -26,8 +26,8 @@ const getTableAction = (year: number, returnExists?: { id: string }) => {
   };
 };
 
-const IndividualDevelopmentLevy = () => {
-  const columns: TableColumn<IndividualDevelopmentLevyRow>[] = useMemo(
+const CompanyDevelopmentLevy = () => {
+  const columns: TableColumn<CompanyDevelopmentLevyRow>[] = useMemo(
     () => [
       {
         name: "Year",
@@ -61,7 +61,7 @@ const IndividualDevelopmentLevy = () => {
   //     }
   //   );
 
-  const data: IndividualDevelopmentLevyRow[] = useMemo(() => {
+  const data: CompanyDevelopmentLevyRow[] = useMemo(() => {
     return Array.from({ length: 10 }, (_, index) => {
       const year = previousYear - index;
       //   const returnExists = returns?.results?.find(
@@ -83,4 +83,4 @@ const IndividualDevelopmentLevy = () => {
   );
 };
 
-export default IndividualDevelopmentLevy;
+export default CompanyDevelopmentLevy;

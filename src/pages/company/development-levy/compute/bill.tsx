@@ -3,7 +3,7 @@ import { useStore } from "@/store";
 import dayjs from "dayjs";
 import useUser from "@/hooks/use-user-type";
 
-const IndividualDevelopmentLevyBill = () => {
+const CompanyDevelopmentLevyBill = () => {
   const tenant = useStore((s) => s.tenant);
   const { user } = useUser();
 
@@ -44,9 +44,9 @@ const IndividualDevelopmentLevyBill = () => {
       title="Development Levy"
       values={values}
       amount="12,845.00"
-      proceedLink="/individual/development-levy/success"
+      proceedLink="/company/development-levy/success"
     />
   );
 };
 
-export default IndividualDevelopmentLevyBill;
+export default CompanyDevelopmentLevyBill;
