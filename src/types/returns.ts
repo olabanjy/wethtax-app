@@ -80,7 +80,7 @@ export type IndividualReturnsList = {
   results: IndividualReturn[];
 };
 
-export type CompanyLevies = {
+export type Levies = {
   development_levy: number;
   capital_gain_min: number;
   capital_gain_percentage: number;

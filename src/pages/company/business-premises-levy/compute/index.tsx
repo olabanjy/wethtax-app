@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
 import { useFetch } from "@/hooks/use-fetch";
-import type { BusinessPremisesLevy, CompanyLevies } from "@/types/returns";
+import type { BusinessPremisesLevy, Levies } from "@/types/returns";
 import { useSend } from "@/hooks/use-send";
 import { useSearchQuery } from "@/hooks/use-search-query";
 
@@ -37,7 +37,7 @@ const ComputeBusinessPremisesLevy = () => {
     resolver: zodResolver(schema),
   });
 
-  const { isLoading } = useFetch<{ data: CompanyLevies }>(
+  const { isLoading } = useFetch<{ data: Levies }>(
     "/returns/company/annual-returns/levies/",
     {
       hideToast: "success",

@@ -12,7 +12,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
 import { useSend } from "@/hooks/use-send";
-import type { IndividualDevelopmentLevy } from "@/types/returns";
+import type { IndividualDevelopmentLevy, Levies } from "@/types/returns";
+import { useFetch } from "@/hooks/use-fetch";
 
 const schema = z.object({
   year: z.string().min(1, "Year is required"),
@@ -41,6 +42,16 @@ const ComputeIndividualDevelopmentLevy = () => {
     },
     resolver: zodResolver(schema),
   });
+
+  const { isLoading } = useFetch<{ data: Pick<Levies, "development_levy"> }>(
+    "/returns/individual/levies/",
+    {
+      hideToast: "success",
+      onSuccess(data) {
+        setValue("amount", data.data.development_levy.toString());
+      },
+    }
+  );
 
   const { isPending, isSuccess, mutate } = useSend<
     unknown,
@@ -90,12 +101,13 @@ const ComputeIndividualDevelopmentLevy = () => {
         <div>
           <Label htmlFor="amount">Levy Amount</Label>
           <Input
+            isAmount
+            disabled
             placeholder="Enter Number"
             value={watch("amount")}
             onChange={(e) => {
               setValue("amount", e.target.value);
             }}
-            isAmount
             error={errors.amount?.message as string}
           />
         </div>
@@ -109,7 +121,11 @@ const ComputeIndividualDevelopmentLevy = () => {
         >
           Cancel
         </Button>
-        <Button type="submit" className="w-full max-w-[14rem] h-12">
+        <Button
+          loading={isPending || isLoading}
+          type="submit"
+          className="w-full max-w-[14rem] h-12"
+        >
           Proceed
         </Button>
       </div>

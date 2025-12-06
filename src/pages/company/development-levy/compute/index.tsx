@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useSend } from "@/hooks/use-send";
 import { useSearchQuery } from "@/hooks/use-search-query";
 import { useFetch } from "@/hooks/use-fetch";
-import type { CompanyDevelopmentLevy, CompanyLevies } from "@/types/returns";
+import type { CompanyDevelopmentLevy, Levies } from "@/types/returns";
 
 const schema = z.object({
   number_of_staffs: z.string().min(1, "Number of Staff is required"),
@@ -37,7 +37,7 @@ const ComputeCompanyDevelopmentLevy = () => {
     resolver: zodResolver(schema),
   });
 
-  const { isLoading } = useFetch<{ data: CompanyLevies }>(
+  const { isLoading } = useFetch<{ data: Levies }>(
     "/returns/company/annual-returns/levies/",
     {
       hideToast: "success",
