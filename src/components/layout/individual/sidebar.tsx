@@ -20,10 +20,6 @@ export const individualSideLinks: SideLinkProps[] = [
         title: "Development Levy",
         href: "/individual/development-levy",
       },
-      {
-        title: "Employment Taxes (PAYE)",
-        href: "/individual/paye",
-      },
     ],
   },
   {

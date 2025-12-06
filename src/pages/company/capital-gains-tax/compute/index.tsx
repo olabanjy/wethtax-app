@@ -8,8 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
 import { Select } from "@/components/ui/select";
-import { YEARS } from "@/constants/common";
+import { PREVIOUS_YEARS } from "@/constants/common";
 import { useSearchQuery } from "@/hooks/use-search-query";
+import type { CapitalGainsTax } from "@/types/returns";
+import { useSend } from "@/hooks/use-send";
 
 const schema = z.object({
   acquisitionPrice: z.string().min(1, "Acquisition Price is required"),
@@ -23,6 +25,7 @@ const ComputeCapitalGainsTax = () => {
   const navigate = useNavigate();
   const { params } = useSearchQuery();
   const year = params.get("year");
+  const [amountPaid, setAmountPaid] = useState<string>("");
 
   const {
     handleSubmit,
@@ -39,8 +42,24 @@ const ComputeCapitalGainsTax = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = () => {
+  const { isPending, isSuccess, mutate } = useSend<
+    unknown,
+    { data: CapitalGainsTax }
+  >("/returns/company/annual-returns/capital-gain/", {
+    hideToast: "success",
+    onSuccess(data) {
+      setAmountPaid(data?.data?.amount_paid.toString());
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof schema>) => {
     setProcessing(true);
+    mutate({
+      year: data.year,
+      asset: data.assetDisposed,
+      acquisition_price: data.acquisitionPrice,
+      selling_price: data.sellingPrice,
+    });
   };
 
   return (
@@ -53,11 +72,11 @@ const ComputeCapitalGainsTax = () => {
               "Building",
               "Furniture",
               "Machinery",
-              "Treasury Bill",
+              "Treasury-Bill",
               "Vehicle",
             ].map((y) => ({
-              value: y,
-              label: y,
+              label: y.replace("-", " "),
+              value: y.toUpperCase(),
             }))}
             value={watch("assetDisposed")}
             onChange={(e) => {
@@ -70,7 +89,7 @@ const ComputeCapitalGainsTax = () => {
         <div>
           <Label htmlFor="year">Year in View</Label>
           <Select
-            options={YEARS.map((y) => ({
+            options={PREVIOUS_YEARS.map((y) => ({
               value: y.toString(),
               label: y.toString(),
             }))}
@@ -116,15 +135,27 @@ const ComputeCapitalGainsTax = () => {
         >
           Cancel
         </Button>
-        <Button type="submit" className="w-full max-w-[14rem] h-12">
+        <Button
+          loading={isPending}
+          type="submit"
+          className="w-full max-w-[14rem] h-12"
+        >
           Proceed
         </Button>
       </div>
       <ProcessingTaxModal
         open={processing}
         toggle={() => setProcessing(!processing)}
-        calculating={false}
-        onProceed={() => navigate(`/company/capital-gains-tax/compute/bill`)}
+        calculating={isPending}
+        onProceed={() => {
+          if (!isSuccess) {
+            setProcessing(false);
+            return;
+          }
+          navigate(`/company/capital-gains-tax/compute/bill`, {
+            state: { year, amount: amountPaid },
+          });
+        }}
       />
     </form>
   );

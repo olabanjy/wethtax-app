@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatter } from "@/lib/utils";
 
 type InputProps = React.ComponentProps<"input"> & {
   error?: string;
@@ -8,12 +8,6 @@ type InputProps = React.ComponentProps<"input"> & {
   label?: string;
   isAmount?: boolean;
 };
-
-const formatter = new Intl.NumberFormat("en-US", {
-  style: "decimal", // Default, but can be 'currency', 'percent', etc.
-  minimumFractionDigits: 2, // Ensures at least 2 decimal places
-  maximumFractionDigits: 2, // Ensures at most 2 decimal places
-});
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
   {
@@ -48,6 +42,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(function Input(
 
     return type;
   }, [type, isFocused]);
+
+  React.useEffect(() => {
+    setValue(props.value);
+  }, [props.value])
 
   return (
     <div>

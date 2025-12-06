@@ -2,11 +2,20 @@ import TaxImplicationBill from "@/components/layout/tax-implication-bill";
 import { useStore } from "@/store";
 import dayjs from "dayjs";
 import useUser from "@/hooks/use-user-type";
+import { useLocation } from "react-router-dom";
+import { currentYear } from "@/constants/common";
+import { formatter } from "@/lib/utils";
 
 const IndividualDevelopmentLevyBill = () => {
   const tenant = useStore((s) => s.tenant);
   const { user } = useUser();
-
+  const { state } = useLocation();
+  const {
+    year = currentYear,
+    amount = "0.00",
+    dateIssued,
+  } = state ||
+  ({} as { amountPaid: string; year: number; dateIssued?: string });
 
   const values = [
     {
@@ -15,7 +24,7 @@ const IndividualDevelopmentLevyBill = () => {
     },
     {
       label: "Issue Date",
-      value: dayjs().format("DD/MM/YYYY"),
+      value: dayjs(dateIssued).format("DD/MM/YYYY"),
     },
     {
       label: "Tax Payer ID",
@@ -23,19 +32,19 @@ const IndividualDevelopmentLevyBill = () => {
     },
     {
       label: "Tax Year in View",
-      value: "2024",
+      value: year,
     },
     {
       label: "Customer Name",
-      value: user?.profile?.first_name + " " + user?.profile?.last_name,
+      value: user?.first_name + " " + user?.last_name,
     },
     {
       label: "Phone Number",
-      value: user?.profile?.phone_number,
+      value: user?.profile?.phone_number_1 ?? user?.phone_number,
     },
     {
       label: "Customer Email Address",
-      value: user?.profile?.email,
+      value: user?.profile?.email_address ?? user?.email,
     },
   ];
 
@@ -43,7 +52,7 @@ const IndividualDevelopmentLevyBill = () => {
     <TaxImplicationBill
       title="Development Levy"
       values={values}
-      amount="12,845.00"
+      amount={formatter.format(+amount)}
       proceedLink="/individual/development-levy/success"
     />
   );

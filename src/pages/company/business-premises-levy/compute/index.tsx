@@ -7,6 +7,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
+import { useFetch } from "@/hooks/use-fetch";
+import type { BusinessPremisesLevy, CompanyLevies } from "@/types/returns";
+import { useSend } from "@/hooks/use-send";
+import { useSearchQuery } from "@/hooks/use-search-query";
 
 const schema = z.object({
   companyRegNumber: z.string().min(1, "Number of Staff is required"),
@@ -16,6 +20,9 @@ const schema = z.object({
 const ComputeBusinessPremisesLevy = () => {
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
+  const { params } = useSearchQuery();
+  const year = params.get("year") || new Date().getFullYear();
+  const [amountPaid, setAmountPaid] = useState<string>("");
 
   const {
     handleSubmit,
@@ -30,8 +37,31 @@ const ComputeBusinessPremisesLevy = () => {
     resolver: zodResolver(schema),
   });
 
+  const { isLoading } = useFetch<{ data: CompanyLevies }>(
+    "/returns/company/annual-returns/levies/",
+    {
+      hideToast: "success",
+      onSuccess(data) {
+        setValue("amount", data.data.premises_levy.toString());
+      },
+    }
+  );
+
+  const { isPending, isSuccess, mutate } = useSend<
+    unknown,
+    { data: BusinessPremisesLevy }
+  >("/returns/company/annual-returns/premises-levy/", {
+    hideToast: "success",
+    onSuccess(data) {
+      setAmountPaid(data?.data?.amount_paid.toString());
+    },
+  });
+
   const onSubmit = () => {
     setProcessing(true);
+    mutate({
+      year: Number(year),
+    });
   };
 
   return (
@@ -57,6 +87,7 @@ const ComputeBusinessPremisesLevy = () => {
               setValue("amount", e.target.value);
             }}
             isAmount
+            disabled
             error={errors.amount?.message as string}
           />
         </div>
@@ -73,6 +104,7 @@ const ComputeBusinessPremisesLevy = () => {
         <Button
           type="submit"
           className="w-full max-w-[14rem] h-12"
+          loading={isLoading || isPending}
         >
           Proceed
         </Button>
@@ -80,10 +112,16 @@ const ComputeBusinessPremisesLevy = () => {
       <ProcessingTaxModal
         open={processing}
         toggle={() => setProcessing(!processing)}
-        calculating={false}
-        onProceed={() =>
-          navigate(`/company/business-premises-levy/compute/bill`)
-        }
+        calculating={isPending}
+        onProceed={() => {
+          if (!isSuccess) {
+            setProcessing(false);
+            return;
+          }
+          navigate(`/company/business-premises-levy/compute/bill`, {
+            state: { year, amount: amountPaid },
+          });
+        }}
       />
     </form>
   );

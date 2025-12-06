@@ -79,3 +79,108 @@ export type IndividualReturnsList = {
   pages: number;
   results: IndividualReturn[];
 };
+
+export type CompanyLevies = {
+  development_levy: number;
+  capital_gain_min: number;
+  capital_gain_percentage: number;
+  premises_levy: number;
+};
+
+export type CompanyReturn = {
+  id: number;
+  icode: string;
+  amount: string;
+  created: string;
+  modified: string;
+  is_active: boolean;
+  return_type: string;
+  month: string;
+  year: number;
+  reference: string;
+  status: string;
+  created_by: string;
+  modified_by: string;
+  company_profile: number;
+};
+
+export type CompanyDevelopmentLevy = {
+  id: number;
+  icode: string;
+  company_return: CompanyReturn;
+  created: string;
+  modified: string;
+  is_active: boolean;
+  number_of_staffs: number;
+  amount_paid: string;
+  created_by: string;
+  modified_by: string;
+};
+
+export type CompanyDevelopmentLevyReturnList = {
+  count: number;
+  page: number;
+  pages: number;
+  results: CompanyDevelopmentLevy[];
+};
+
+export type BusinessPremisesLevy = {
+  id: number;
+  icode: string;
+  company_return: CompanyReturn;
+  created: string;
+  modified: string;
+  is_active: boolean;
+  number_of_staffs: number;
+  amount_paid: string;
+  created_by: string;
+  modified_by: string;
+};
+
+export type BusinessPremisesLevyReturnList = {
+  count: number;
+  page: number;
+  pages: number;
+  results: BusinessPremisesLevy[];
+};
+
+export type CapitalGainsTax = {
+  id: number;
+  icode: string;
+  company_return: CompanyReturn;
+  created: string;
+  modified: string;
+  is_active: boolean;
+  asset: string;
+  acquisition_price: string;
+  selling_price: string;
+  amount_paid: string;
+  created_by: string;
+  modified_by: string;
+};
+
+export type CapitalGainsTaxReturnList = {
+  count: number;
+  page: number;
+  pages: number;
+  results: CapitalGainsTax[];
+};
+
+export type IndividualDevelopmentLevy = {
+  id: number;
+  icode: string;
+  individual_return: IndividualReturn;
+  created: string;
+  modified: string;
+  is_active: boolean;
+  amount_paid: string;
+  created_by: string | null;
+  modified_by: string | null;
+};
+
+export type IndividualDevelopmentLevyReturnList = {
+  count: number;
+  page: number;
+  pages: number;
+  results: IndividualDevelopmentLevy[];
+};

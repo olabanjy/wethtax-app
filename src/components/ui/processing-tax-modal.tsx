@@ -25,9 +25,9 @@ const ProcessingTaxModal = ({
           {Array.from({ length: 3 }).map((_, index) => (
             <div
               key={index}
-              className={`w-2 h-2 rounded-full bg-gray-400 animate-pulse delay-${
+              className={`w-2 h-2 rounded-full bg-gray-400 delay-${
                 index * 100
-              }`}
+              } ${calculating ? "animate-pulse" : ""}`}
             />
           ))}
         </div>

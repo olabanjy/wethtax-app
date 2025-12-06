@@ -27,3 +27,9 @@ export function cn(...inputs: ClassValue[]) {
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+export const formatter = new Intl.NumberFormat("en-US", {
+  style: "decimal", // Default, but can be 'currency', 'percent', etc.
+  minimumFractionDigits: 2, // Ensures at least 2 decimal places
+  maximumFractionDigits: 2, // Ensures at most 2 decimal places
+});

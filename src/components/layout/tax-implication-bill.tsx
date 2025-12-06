@@ -30,7 +30,7 @@ const TaxImplicationBill = ({
           {values.map((value, index) => (
             <div key={index} className="pb-3.5 border-b">
               <p className="text-gray-500 text-sm">{value.label}</p>
-              <p className="text-gray-700 text-lg font-medium">{value.value}</p>
+              <p className="text-gray-700 text-lg font-medium break-all">{value.value ?? '--'}</p>
             </div>
           ))}
         </div>
@@ -41,6 +41,7 @@ const TaxImplicationBill = ({
       <SubmitButtonGroup
         firstButtonProps={{
           children: "Cancel",
+          onClick: () => navigate(-1),
         }}
         secondButtonProps={{
           children: "Continue",

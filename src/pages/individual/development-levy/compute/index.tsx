@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { YEARS } from "@/constants/common";
+import { PREVIOUS_YEARS } from "@/constants/common";
 import { useSearchQuery } from "@/hooks/use-search-query";
 import useUser from "@/hooks/use-user-type";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 import { useState } from "react";
+import { useSend } from "@/hooks/use-send";
+import type { IndividualDevelopmentLevy } from "@/types/returns";
 
 const schema = z.object({
   year: z.string().min(1, "Year is required"),
@@ -24,6 +26,7 @@ const ComputeIndividualDevelopmentLevy = () => {
   const { user } = useUser();
   const { params } = useSearchQuery();
   const year = params.get("year");
+  const [amountPaid, setAmountPaid] = useState<string>("");
 
   const {
     handleSubmit,
@@ -39,8 +42,22 @@ const ComputeIndividualDevelopmentLevy = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = () => {
+  const { isPending, isSuccess, mutate } = useSend<
+    unknown,
+    { data: IndividualDevelopmentLevy }
+  >("/returns/individual/development-levy/", {
+    onSuccess(data) {
+      setAmountPaid(data?.data?.amount_paid.toString());
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof schema>) => {
     setProcessing(true);
+    mutate({
+      year: data.year,
+      payer_id: data.payerId,
+      amount_paid: parseFloat(data.amount.replace(/,/g, "")),
+    });
   };
 
   return (
@@ -58,7 +75,7 @@ const ComputeIndividualDevelopmentLevy = () => {
         <div>
           <Label htmlFor="year">Year in View</Label>
           <Select
-            options={YEARS.map((y) => ({
+            options={PREVIOUS_YEARS.map((y) => ({
               value: y.toString(),
               label: y.toString(),
             }))}
@@ -92,20 +109,23 @@ const ComputeIndividualDevelopmentLevy = () => {
         >
           Cancel
         </Button>
-        <Button
-          type="submit"
-          className="w-full max-w-[14rem] h-12"
-        >
+        <Button type="submit" className="w-full max-w-[14rem] h-12">
           Proceed
         </Button>
       </div>
       <ProcessingTaxModal
         open={processing}
         toggle={() => setProcessing(!processing)}
-        calculating={false}
-        onProceed={() =>
-          navigate(`/individual/development-levy/compute/bill`)
-        }
+        calculating={isPending}
+        onProceed={() => {
+          if (!isSuccess) {
+            setProcessing(false);
+            return;
+          }
+          navigate(`/individual/development-levy/compute/bill`, {
+            state: { year, amount: amountPaid },
+          });
+        }}
       />
     </form>
   );
