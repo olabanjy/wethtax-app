@@ -81,7 +81,7 @@ const IndividualDevelopmentLevy = () => {
     );
 
   const data: IndividualDevelopmentLevyRow[] = useMemo(() => {
-    return Array.from({ length: 10 }, (_, index) => {
+    return Array.from({ length: 5 }, (_, index) => {
       const year = previousYear - index;
       const returnExists = returns?.results?.find(
         (r) => r.individual_return.year_in_view === year

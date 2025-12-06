@@ -38,7 +38,7 @@ const getTableAction = (year: number, returnExists?: IndividualReturn) => {
   }
 
   return {
-    actionHref: `#`,
+    actionHref: `/individual/personal-income-tax/compute/bill?id=${returnExists.id}`,
     label: "Click to generate TCC",
     status: "Filled",
   };
@@ -80,7 +80,7 @@ const PersonalIncomeTax = () => {
   );
 
   const data: PersonalIncomeTaxRow[] = useMemo(() => {
-    return Array.from({ length: 10 }, (_, index) => {
+    return Array.from({ length: 5 }, (_, index) => {
       const year = previousYear - index;
       const returnExists = returns?.results?.find(
         (r) => r.year_in_view === year

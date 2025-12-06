@@ -56,6 +56,16 @@ export type OtherIncome = {
   income: number;
 };
 
+export type IndividualReturnSummary = {
+  biller: string;
+  email_address: string;
+  amount: number;
+  customer_name: string;
+  tax_payer_id: string;
+  created_at: string;
+  phone_number: string;
+};
+
 export type IndividualReturn = {
   id: number;
   icode: string;
