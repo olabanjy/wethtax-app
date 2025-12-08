@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constants/states";
 import { TAX_STATIONS } from "@/constants/profile";
-import { getLcdasFor, getLgasForState } from "@/constants/locations";
+import { useStates } from "@/hooks/use-states";
+import { useLgas } from "@/hooks/use-lgas";
 import clsx from "clsx";
 import { Controller, useForm } from "react-hook-form";
 
@@ -60,7 +60,8 @@ export function CompanyDetailsStep({
   });
 
   const selectedState = watch("state");
-  const selectedLga = watch("lga");
+  const states = useStates();
+  const lgas = useLgas(selectedState);
 
   return (
     <form
@@ -164,7 +165,7 @@ export function CompanyDetailsStep({
           rules={{ required: "Select state of residence" }}
           render={({ field: { value, onChange } }) => (
             <Select
-              options={STATES}
+              options={states.options}
               placeholder="State of Residence"
               value={value}
               onChange={(v) => {
@@ -183,7 +184,7 @@ export function CompanyDetailsStep({
           rules={{ required: "Select LGA" }}
           render={({ field: { value, onChange } }) => (
             <Select
-              options={getLgasForState(selectedState)}
+              options={lgas.options}
               placeholder="Select LGA"
               value={value}
               onChange={(v) => {
@@ -198,15 +199,9 @@ export function CompanyDetailsStep({
         <Controller
           control={control}
           name="lcda"
-          rules={{ required: "Select LCDA" }}
-          render={({ field: { value, onChange } }) => (
-            <Select
-              options={getLcdasFor(selectedState, selectedLga)}
-              placeholder="Select LCDA"
-              value={value}
-              onChange={onChange}
-              error={(errors as any).lcda?.message}
-            />
+          rules={{ required: "Enter LCDA" }}
+          render={({ field }) => (
+            <Input placeholder="Select LCDA" error={(errors as any).lcda?.message} {...field} />
           )}
         />
 
