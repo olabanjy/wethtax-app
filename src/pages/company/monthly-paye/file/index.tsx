@@ -12,6 +12,7 @@ import { useSearchQuery } from "@/hooks/use-search-query";
 import { useSend } from "@/hooks/use-send";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import ProcessingTaxModal from "@/components/ui/processing-tax-modal";
 
 const defaultValues = {
   tin: "",
@@ -30,6 +31,9 @@ const defaultValues = {
 };
 
 const CompanyFileMonthly = () => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [fileId, setFileId] = useState<number | null>(null);
+
   const navigate = useNavigate();
   const { params } = useSearchQuery();
 
@@ -51,28 +55,22 @@ const CompanyFileMonthly = () => {
     name: "filings",
   });
 
-  const { mutateAsync: submitMonthlyPaye, isPending } = useSend<any, any>(
-    "/returns/company/monthly-returns/monthly-payee/",
-    {
-      method: "post",
-      successMessage: "Monthly PAYE submitted",
-      onSuccess: () => {
-        navigate("/company/monthly-paye");
-      },
-    }
-  );
+  const {
+    mutateAsync: submitMonthlyPaye,
+    isPending,
+    isSuccess,
+  } = useSend<any, any>("/returns/company/monthly-returns/monthly-payee/", {
+    method: "post",
+  });
 
-  const { mutateAsync: uploadMonthlyPayeFile, isPending: isUploading } = useSend<
-    FormData,
-    any
-  >(
+  const {
+    mutateAsync: uploadMonthlyPayeFile,
+    isPending: isUploading,
+    isSuccess: isUploadSuccess,
+  } = useSend<FormData, any>(
     "/returns/company/monthly-returns/monthly-payee/upload/",
     {
       method: "post",
-      successMessage: "File uploaded successfully",
-      onSuccess: () => {
-        navigate("/company/monthly-paye");
-      },
     }
   );
 
@@ -95,7 +93,15 @@ const CompanyFileMonthly = () => {
       monthly_payees,
     };
 
-    await submitMonthlyPaye(payload);
+    setIsProcessing(true);
+
+    const res = await submitMonthlyPaye(payload);
+    const id =
+      (res as any)?.data?.id ??
+      (res as any)?.data?.data?.id ??
+      (res as any)?.id ??
+      null;
+    setFileId(id != null ? Number(id) : null);
   };
 
   const onUpload = async () => {
@@ -107,11 +113,32 @@ const CompanyFileMonthly = () => {
     formData.append("year", String(yearParam));
     formData.append("month", monthParam.toUpperCase());
     formData.append("file", uploadedFile);
-    await uploadMonthlyPayeFile(formData);
+
+    setIsProcessing(true);
+    const res = await uploadMonthlyPayeFile(formData);
+    const id =
+      (res as any)?.data?.id ??
+      (res as any)?.data?.data?.id ??
+      (res as any)?.id ??
+      null;
+    setFileId(id != null ? Number(id) : null);
   };
 
   return (
     <div className="w-full space-y-10">
+      <ProcessingTaxModal
+        open={isProcessing}
+        toggle={() => setIsProcessing(false)}
+        calculating={isPending || isUploading}
+        onProceed={() => {
+          if ((!isSuccess && !isUploadSuccess) || !fileId) {
+            setIsProcessing(false);
+            return;
+          }
+          navigate(`/company/monthly-paye/${fileId}/summary`);
+        }}
+      />
+
       <BackButton title="Monthly PAYE" />
 
       <div className="w-full space-y-6">
