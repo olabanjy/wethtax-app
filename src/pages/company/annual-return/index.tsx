@@ -5,6 +5,7 @@ import Tabs from "@/components/ui/tabs";
 import { useFetch } from "@/hooks/use-fetch";
 
 type AnnualReturnRow = {
+  id?: any;
   year: number;
   status: "Filled" | "Not Filled";
   actionHref: string;
@@ -14,22 +15,15 @@ const AnnualReturn = () => {
   const [activeTab, setActiveTab] = useState("annual");
 
   const endpointByTab: Record<string, string> = {
-    annual:
-      "/returns/company/annual-returns/annual-returns/",
-    projection:
-      "/returns/company/annual-returns/projection-returns/",
-    withholding:
-      "/returns/company/annual-returns/witholding-tax/",
-    schedule:
-      "/returns/company/annual-returns/schedule-returns/",
+    annual: "/returns/company/annual-returns/annual-returns/",
+    projection: "/returns/company/annual-returns/projection-returns/",
+    withholding: "/returns/company/annual-returns/witholding-tax/",
+    schedule: "/returns/company/annual-returns/schedule-returns/",
   };
 
   const normalizeRows = (resp: unknown): AnnualReturnRow[] => {
     const baseHref = `/company/annual-returns/file/${activeTab}`;
-    // Support multiple API response shapes:
-    // - Array
-    // - { data: [...] }
-    // - { results: [...], count, page, pages } (pagination)
+
     const items =
       (Array.isArray(resp)
         ? resp
@@ -39,7 +33,12 @@ const AnnualReturn = () => {
     if (!Array.isArray(items)) return [];
 
     return items.map((item: any) => {
-      const createdDate = item?.createdAt ?? item?.created_at ?? item?.date ?? item?.updatedAt ?? new Date().toISOString();
+      const createdDate =
+        item?.createdAt ??
+        item?.created_at ??
+        item?.date ??
+        item?.updatedAt ??
+        new Date().toISOString();
       const derivedYear = Number(
         item?.year ??
           item?.company_return?.year ?? // schedule returns nested year
@@ -48,6 +47,7 @@ const AnnualReturn = () => {
           String(createdDate).slice(0, 4)
       );
       return {
+        id: item?.id ?? null,
         year: Number.isFinite(derivedYear)
           ? derivedYear
           : new Date().getFullYear(),
@@ -116,12 +116,16 @@ const AnnualReturn = () => {
         width: "180px",
         cell: (row) => (
           <a
-            href={row.actionHref}
+            href={
+              row.status === "Not Filled"
+                ? row.actionHref
+                : `/company/annual-returns/${row.id}/summary`
+            }
             className="text-[#7879C5] hover:underline shrink-0 text-left"
           >
             {row.status === "Not Filled"
               ? "Click to file return"
-              : "View details"}
+              : "View summary"}
           </a>
         ),
         ignoreRowClick: true,

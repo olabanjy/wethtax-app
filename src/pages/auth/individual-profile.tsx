@@ -151,6 +151,16 @@ const IndividualProfile = () => {
       return Math.abs(ageDate.getUTCFullYear() - 1970);
     };
 
+    const toIntOrNull = (val?: unknown) => {
+      if (val === null || val === undefined || val === "") return null;
+      const n = Number(val);
+      return Number.isFinite(n) ? Math.trunc(n) : null;
+    };
+
+    const stateOfOriginId = toIntOrNull(v.stateOfOrigin as any);
+    const stateOfResidenceId = toIntOrNull(v.stateOfResidence as any);
+    const lgaOfResidenceId = toIntOrNull(v.lga as any);
+
     return {
       tax_station: v.taxStation ?? "",
       first_time_filling: true,
@@ -165,7 +175,7 @@ const IndividualProfile = () => {
       gender: v.gender ?? "",
       house_number: 0,
       street: v.address ?? "",
-      city: v.lga ?? "",
+      city: v.lcda ?? "",
       lcda: v.lcda ?? "",
       phone_number_1: v.phone ?? "",
       phone_number_2: "",
@@ -175,9 +185,9 @@ const IndividualProfile = () => {
       business_type: v.businessType ?? "",
       employment_status: v.employmentStatus ?? "",
       occupation: v.occupation ?? "",
-      state_of_origin: null,
-      state_of_residence: null,
-      lga_of_residence: null,
+      state_of_origin: stateOfOriginId,
+      state_of_residence: stateOfResidenceId,
+      lga_of_residence: lgaOfResidenceId,
     };
   };
 

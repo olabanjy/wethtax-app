@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { STATES } from "@/constants/states";
 import { Radio } from "@/components/ui/radio";
-import { getLgasForState, getLcdasFor } from "@/constants/locations";
+import { useStates } from "@/hooks/use-states";
+import { useLgas } from "@/hooks/use-lgas";
 import {
   TITLES,
   MARITAL_STATUSES,
@@ -84,7 +84,8 @@ export function PersonalDetailsStep({
   });
 
   const stateOfResidence = watch("stateOfResidence");
-  const selectedLga = watch("lga");
+  const states = useStates();
+  const lgas = useLgas(stateOfResidence);
 
   return (
     <form
@@ -205,7 +206,7 @@ export function PersonalDetailsStep({
           rules={{ required: "Select state of origin" }}
           render={({ field: { value, onChange } }) => (
             <Select
-              options={STATES}
+              options={states.options}
               placeholder="State of Origin"
               value={value}
               onChange={onChange}
@@ -277,7 +278,7 @@ export function PersonalDetailsStep({
           rules={{ required: "Select state of residence" }}
           render={({ field: { value, onChange } }) => (
             <Select
-              options={STATES}
+              options={states.options}
               placeholder="State of Residence"
               value={value}
               onChange={(v) => {
@@ -296,7 +297,7 @@ export function PersonalDetailsStep({
           rules={{ required: "Select LGA" }}
           render={({ field: { value, onChange } }) => (
             <Select
-              options={getLgasForState(stateOfResidence)}
+              options={lgas.options}
               placeholder="LGA"
               value={value}
               onChange={(v) => {
@@ -311,15 +312,9 @@ export function PersonalDetailsStep({
         <Controller
           control={control}
           name="lcda"
-          rules={{ required: "Select LCDA" }}
-          render={({ field: { value, onChange } }) => (
-            <Select
-              options={getLcdasFor(stateOfResidence, selectedLga)}
-              placeholder="LCDA"
-              value={value}
-              onChange={onChange}
-              error={(errors as any).lcda?.message}
-            />
+          rules={{ required: "Enter LCDA" }}
+          render={({ field }) => (
+            <Input placeholder="LCDA" error={(errors as any).lcda?.message} {...field} />
           )}
         />
       </div>

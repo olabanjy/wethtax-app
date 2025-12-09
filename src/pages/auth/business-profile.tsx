@@ -161,6 +161,15 @@ const BusinessProfile = () => {
   );
 
   const buildPayload = (v: Partial<AllValues>) => {
+    const toIntOrNull = (val?: unknown) => {
+      if (val === null || val === undefined || val === "") return null;
+      const n = Number(val);
+      return Number.isFinite(n) ? Math.trunc(n) : null;
+    };
+
+    const stateId = toIntOrNull(v.state as any);
+    const lgaId = toIntOrNull(v.lga as any);
+
     return {
       image: null,
       tax_station: v.taxStation ?? "",
@@ -176,10 +185,10 @@ const BusinessProfile = () => {
       place_of_business: v.placeOfBusiness ?? "",
       street_number: "",
       street_name: v.address ?? "",
-      city: v.lga ?? "",
+      city: v.lcda ?? "",
       lcda: v.lcda ?? "",
-      state: null,
-      lga: null,
+      state: stateId,
+      lga: lgaId,
     };
   };
 
