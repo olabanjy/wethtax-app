@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useFetch } from "@/hooks/use-fetch";
 
 type MonthlyPayeRow = {
+  id?: any;
   month: string;
   amount?: string;
   referenceNo?: string;
@@ -56,12 +57,14 @@ const MonthlyPAYE = () => {
       const monthName = allMonths[i];
       const backendKey = monthName.toUpperCase();
       const match = monthToItem.get(backendKey);
+      const id = match?.["id"] != null ? String(match["id"]) : "0";
       const amount =
         match?.["amount"] != null ? String(match["amount"]) : undefined;
       const referenceNo =
         match?.["reference"] != null ? String(match["reference"]) : undefined;
       const status: "Filled" | "Not Filled" = match ? "Filled" : "Not Filled";
       computed.push({
+        id,
         month: monthName,
         amount,
         referenceNo,
@@ -103,13 +106,13 @@ const MonthlyPAYE = () => {
             to={
               row.status === "Not Filled"
                 ? `/company/monthly-paye/file?month=${row.month}&year=${year}`
-                : "#"
+                : `/company/monthly-paye/${row.id}/summary`
             }
             className="text-[#7879C5] hover:underline shrink-0 text-left"
           >
             {row.status === "Not Filled"
               ? "Click to file return"
-              : "View history"}
+              : "View summary"}
           </Link>
         ),
         ignoreRowClick: true,

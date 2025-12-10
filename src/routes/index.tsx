@@ -16,10 +16,12 @@ import Company from "@/pages/company";
 import MonthlyPAYE from "@/pages/company/monthly-paye";
 import AnnualReturn from "@/pages/company/annual-return";
 import CompanyFileMonthly from "@/pages/company/monthly-paye/file";
+import CompanyMonthlyPayeSummary from "@/pages/company/monthly-paye/file/summary";
 import CompanyFileAnnualReturn from "@/pages/company/annual-return/file/annual";
 import CompanyFileProjection from "@/pages/company/annual-return/file/projection";
 import CompanyFileWithholding from "@/pages/company/annual-return/file/withholding";
 import CompanyFileSchedule from "@/pages/company/annual-return/file/schedule";
+import CompanyAnnualReturnSummary from "@/pages/company/annual-return/summary";
 import AccommodationPIT from "@/pages/individual/personal-income-tax/compute/accommodation";
 import IncomePIT from "@/pages/individual/personal-income-tax/compute/income";
 import PITBill from "@/pages/individual/personal-income-tax/compute/bill";
@@ -62,7 +64,15 @@ const AppRouter = () => {
           <Route index element={<Company />} />
           <Route path="monthly-paye" element={<MonthlyPAYE />} />
           <Route path="monthly-paye/file" element={<CompanyFileMonthly />} />
+          <Route
+            path="monthly-paye/:id/summary"
+            element={<CompanyMonthlyPayeSummary />}
+          />
           <Route path="annual-returns" element={<AnnualReturn />} />
+          <Route
+            path="annual-returns/:id/summary"
+            element={<CompanyAnnualReturnSummary />}
+          />
           <Route
             path="annual-returns/file/annual"
             element={<CompanyFileAnnualReturn />}
