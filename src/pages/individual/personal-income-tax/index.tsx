@@ -39,7 +39,7 @@ const getTableAction = (year: number, returnExists?: IndividualReturn) => {
 
   return {
     actionHref: `/individual/personal-income-tax/compute/bill?id=${returnExists.id}`,
-    label: "Click to generate TCC",
+    label: "View summary",
     status: "Filled",
   };
 };

@@ -30,7 +30,7 @@ const getTableAction = (year: number, returnExists?: TCapitalGainsTax) => {
 
   return {
     actionHref: `/company/capital-gains-tax/compute/bill`,
-    label: "Click to generate TCC",
+    label: "View summary",
     status: "Filled",
     disposedAsset: returnExists.asset,
     state: {

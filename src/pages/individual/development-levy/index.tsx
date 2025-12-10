@@ -33,7 +33,7 @@ const getTableAction = (
 
   return {
     actionHref: `/individual/development-levy/compute/bill`,
-    label: "Click to generate TCC",
+    label: "View summary",
     status: "Filled",
     state: {
       year,
