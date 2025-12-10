@@ -1,8 +1,8 @@
 import * as React from "react";
-import ClickAwayListener from "react-click-away-listener";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 type DatePickerProps = {
   value?: string; // ISO format: YYYY-MM-DD
@@ -116,40 +116,32 @@ export function DatePicker({
   };
 
   return (
-    <ClickAwayListener onClickAway={() => setOpen(false)}>
+    <Popover open={open} onOpenChange={setOpen}>
       <div className={cn("relative w-full", className)}>
         {title && <p className="font-medium text-[#414141] mb-2">{title}</p>}
 
-        <button
-          type="button"
-          aria-haspopup="dialog"
-          aria-expanded={open}
-          aria-invalid={ariaInvalid}
-          disabled={disabled}
-          onClick={() => setOpen((p) => !p)}
-          className={cn(
-            "dark:bg-input/30 border-input h-14 w-full rounded-md border bg-transparent px-4 text-left text-base flex items-center justify-between transition-[color,box-shadow] outline-none",
-            "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] cursor-pointer",
-            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-            ariaInvalid && "border-destructive ring-destructive/20"
-          )}
-        >
-          <span className={cn(!label && "text-muted-foreground")}>
-            {label || placeholder}
-          </span>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-haspopup="dialog"
+            aria-invalid={ariaInvalid}
+            disabled={disabled}
+            className={cn(
+              "dark:bg-input/30 border-input h-14 w-full rounded-md border bg-transparent px-4 text-left text-base flex items-center justify-between transition-[color,box-shadow] outline-none",
+              "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] cursor-pointer",
+              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+              ariaInvalid && "border-destructive ring-destructive/20"
+            )}
+          >
+            <span className={cn(!label && "text-muted-foreground")}>
+              {label || placeholder}
+            </span>
 
-          <Calendar className="size-5 text-muted-foreground" />
-        </button>
-
-        <div
-          className={cn(
-            "w-[305px] absolute left-0 right-0 z-50 mt-2 origin-top overflow-hidden rounded-md border border-input bg-popover text-popover-foreground shadow-md",
-            open
-              ? "animate-fadeIn animate-duration-200"
-              : "pointer-events-none hidden"
-          )}
-          role="dialog"
-          aria-label="Date picker"
+            <Calendar className="size-5 text-muted-foreground" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="p-0 w-[19rem] overflow-hidden rounded-md border border-input bg-popover text-popover-foreground shadow-md"
         >
           <div className="p-3">
             <div className="flex items-center justify-between mb-2">
@@ -227,11 +219,11 @@ export function DatePicker({
               </button>
             </div>
           </div>
-        </div>
+        </PopoverContent>
 
         {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
       </div>
-    </ClickAwayListener>
+    </Popover>
   );
 }
 
