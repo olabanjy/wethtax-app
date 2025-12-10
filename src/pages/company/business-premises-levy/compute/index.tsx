@@ -11,9 +11,12 @@ import { useFetch } from "@/hooks/use-fetch";
 import type { BusinessPremisesLevy, Levies } from "@/types/returns";
 import { useSend } from "@/hooks/use-send";
 import { useSearchQuery } from "@/hooks/use-search-query";
+import useUser from "@/hooks/use-user-type";
 
 const schema = z.object({
-  companyRegNumber: z.string().min(1, "Number of Staff is required"),
+  companyRegNumber: z
+    .string()
+    .min(1, "Company Registration Number is required"),
   amount: z.string().min(1, "Levy Amount is required"),
 });
 
@@ -21,6 +24,7 @@ const ComputeBusinessPremisesLevy = () => {
   const [processing, setProcessing] = useState(false);
   const navigate = useNavigate();
   const { params } = useSearchQuery();
+  const { user } = useUser();
   const year = params.get("year") || new Date().getFullYear();
   const [amountPaid, setAmountPaid] = useState<string>("");
 
@@ -31,7 +35,7 @@ const ComputeBusinessPremisesLevy = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      companyRegNumber: "",
+      companyRegNumber: user?.company_profile.reg_no ?? "",
       amount: "",
     },
     resolver: zodResolver(schema),
@@ -70,6 +74,7 @@ const ComputeBusinessPremisesLevy = () => {
         <div>
           <Label htmlFor="companyRegNumber">Company Registration Number</Label>
           <Input
+            disabled
             placeholder="Enter Company Registration Number"
             value={watch("companyRegNumber")}
             onChange={(e) => {
