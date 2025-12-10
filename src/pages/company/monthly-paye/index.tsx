@@ -5,6 +5,7 @@ import type { TableColumn } from "@/components/ui/data-table";
 import YearSelect from "@/modules/dashboard/home/common/year-select";
 import { Link } from "react-router-dom";
 import { useFetch } from "@/hooks/use-fetch";
+import { formatter } from "@/lib/utils";
 
 type MonthlyPayeRow = {
   id?: any;
@@ -83,7 +84,7 @@ const MonthlyPAYE = () => {
       },
       {
         name: "Amount",
-        selector: (row) => row.amount ?? "--",
+        selector: (row) => row.amount ? formatter.format(Number(row.amount)) : "--",
       },
       {
         name: "Reference No",
